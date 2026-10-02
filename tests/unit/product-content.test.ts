@@ -1,10 +1,10 @@
 import { readFileSync } from 'node:fs';
-import yaml from 'js-yaml';
+import { parse } from 'yaml';
 import { globSync } from 'tinyglobby';
 import { describe, expect, it } from 'vitest';
 import { PRODUCT_GLOB } from '../../src/lib/product-schema';
 
-const front = (f: string) => yaml.load(readFileSync(f, 'utf8').split('---')[1]) as Record<string, unknown>;
+const front = (f: string) => parse(readFileSync(f, 'utf8').split('---')[1]) as Record<string, unknown>;
 
 describe('product content', () => {
   it('keeps commas inside spec values', () => {
