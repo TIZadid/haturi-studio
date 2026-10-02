@@ -2,7 +2,8 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  site: 'https://haturi.pages.dev',
+  site: 'https://haturi-studio.zlabz.workers.dev',
+  trailingSlash: 'never',
   integrations: [sitemap()],
   vite: {
     build: { assetsInlineLimit: 0 },
