@@ -29,3 +29,26 @@ const hint = kind === 'medal-hanger' ? 'Drag to turn / Tap to hang a medal' : 'D
   .viewer__right { display: flex; gap: var(--space-4); }
   button { background: none; border: 0; padding: 0; cursor: pointer; }
 </style>
+<script>
+  import { onPage } from '../scripts/motion/lifecycle';
+  onPage(() => {
+    const cleanups: Array<() => void> = [];
+    let disposed = false;
+    document.querySelectorAll<HTMLElement>('[data-viewer]').forEach((el) => {
+      const io = new IntersectionObserver(async ([entry]) => {
+        if (!entry.isIntersecting) return;
+        io.disconnect();
+        try {
+          const { mountViewer } = await import('../scripts/three/viewer');
+          const dispose = await mountViewer(el);
+          if (disposed) dispose(); else cleanups.push(dispose);
+        } catch (err) {
+          console.warn('3D viewer unavailable, showing photo', err);
+        }
+      }, { rootMargin: '200px' });
+      io.observe(el);
+      cleanups.push(() => io.disconnect());
+    });
+    return () => { disposed = true; cleanups.splice(0).forEach((c) => c()); };
+  });
+</script>
