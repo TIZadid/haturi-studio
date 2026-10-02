@@ -44,3 +44,9 @@ test('first screen shows the wordmark and the product photo', async ({ page, isM
     expect(dm.y + dm.height).toBeLessThan(vh);
   }
 });
+
+test('silent reels do not offer a sound toggle', async ({ page }) => {
+  await page.goto('/products/medal-hanger');
+  await expect(page.locator('[data-reel]')).toHaveCount(1);
+  await expect(page.locator('[data-reel-sound]')).toHaveCount(0);
+});

@@ -10,7 +10,6 @@ const posterImg = await getImage({ src: poster, width: 720, format: 'webp' });
     <div class="reel__frame">
       <video src={src} poster={posterImg.src} muted loop playsinline preload="none" data-autoplay data-reel data-cursor="PLAY"></video>
       <div class="reel__overlay mono"><span class="reel__rule"></span>{code} / In motion</div>
-      <button type="button" class="reel__sound mono" data-reel-sound aria-pressed="false">[Sound on]</button>
     </div>
     <div class="reel__copy">
       <p class="mono label" data-reveal>[Film]</p>
@@ -24,24 +23,17 @@ const posterImg = await getImage({ src: poster, width: 720, format: 'webp' });
   video { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; }
   .reel__overlay { position: absolute; left: var(--space-4); bottom: var(--space-4); color: var(--color-cream); display: flex; align-items: center; gap: var(--space-3); }
   .reel__rule { width: 32px; border-top: 1px solid var(--hairline-dark); }
-  .reel__sound { position: absolute; right: var(--space-4); top: var(--space-4); background: none; border: 0; color: var(--color-cream); cursor: pointer; }
   .reel__word { font-size: clamp(56px, 9vw, 160px); }
   @media (min-width: 900px) { .reel__grid { grid-template-columns: 4fr 7fr; } }
 </style>
 <script>
   import { onPage } from '../scripts/motion/lifecycle';
   onPage(() => {
+    // reels are silent: play while in view, pause when not
     const video = document.querySelector<HTMLVideoElement>('[data-reel]');
-    const btn = document.querySelector<HTMLButtonElement>('[data-reel-sound]');
-    if (!video || !btn) return;
+    if (!video) return;
     const io = new IntersectionObserver(([e]) => (e.isIntersecting ? video.play().catch(() => {}) : video.pause()), { threshold: 0.3 });
     io.observe(video);
-    const toggle = () => {
-      video.muted = !video.muted;
-      btn.textContent = video.muted ? '[Sound on]' : '[Sound off]';
-      btn.setAttribute('aria-pressed', String(!video.muted));
-    };
-    btn.addEventListener('click', toggle);
-    return () => { io.disconnect(); btn.removeEventListener('click', toggle); video.pause(); };
+    return () => { io.disconnect(); video.pause(); };
   });
 </script>

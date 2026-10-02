@@ -40,6 +40,8 @@ const og = image ? await getImage({ src: image, width: 1200, format: 'jpg' }) : 
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     {og && <meta property="og:image" content={new URL(og.src, Astro.site)} />}
+    {og && <meta property="og:image:width" content={String(og.attributes.width)} />}
+    {og && <meta property="og:image:height" content={String(og.attributes.height)} />}
     <meta name="twitter:card" content="summary_large_image" />
     <ClientRouter />
   </head>

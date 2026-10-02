@@ -15,3 +15,11 @@ it('canonical URLs have no trailing slash', () => {
   const html = readFileSync('dist/products/medal-hanger/index.html', 'utf8');
   expect(html).toMatch(/<link rel="canonical" href="[^"]*\/products\/medal-hanger">/);
 });
+
+it('home share image shows both products, 1200 × 630', () => {
+  const html = readFileSync('dist/index.html', 'utf8');
+  const m = html.match(/<meta property="og:image" content="[^"]*\/_astro\/(og-studio[^"]+)"/);
+  expect(m).not.toBeNull();
+  expect(html).toContain('<meta property="og:image:width" content="1200">');
+  expect(html).toContain('<meta property="og:image:height" content="630">');
+});
