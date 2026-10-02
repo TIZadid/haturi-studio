@@ -1,9 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Problem from '../components/Problem.astro';
+import hero from '../assets/home/hero.jpg';
 ---
-<Base>
-  <main data-ground="cream" class="section wrap">
-    <p class="mono label" data-reveal>[Haturi Studio] / Dhaka</p>
-    <h1 class="h-hero">Haturi Studio</h1>
+<Base image={hero}>
+  <main>
+    <Hero />
+    <Problem />
   </main>
 </Base>

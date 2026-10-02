@@ -1,0 +1,85 @@
+---
+import { Picture } from 'astro:assets';
+import improvised from '../assets/problem/medal-hung-improvised.jpg';
+import deskPile from '../assets/problem/medals-desk-pile.jpg';
+import headboard from '../assets/problem/medals-headboard.jpg';
+import macro from '../assets/problem/medals-pile-macro.jpg';
+import shelfClose from '../assets/problem/medals-shelf-close.jpg';
+import shelfWide from '../assets/problem/medals-shelf-wide.jpg';
+const photos = [
+  { src: headboard, caption: 'Headboard', alt: 'Two medals hung on the corner of a headboard, one more on the bedside table.' },
+  { src: deskPile, caption: 'Desk pile', alt: 'Medals piled beside a keyboard on a desk.' },
+  { src: improvised, caption: 'On a speaker', alt: 'A medal hung off the edge of a speaker.' },
+  { src: macro, caption: 'The pile', alt: 'A close tangle of medals and ribbons.' },
+  { src: shelfClose, caption: 'Bookshelf', alt: 'Medals leaning against books on a shelf.' },
+  { src: shelfWide, caption: 'Bookshelf, again', alt: 'Medals tucked between books, wider view.' },
+];
+---
+<section id="problem" class="problem" data-ground="cream" data-problem>
+  <div class="wrap problem__inner">
+    <div class="problem__copy">
+      <p class="mono label">[Be honest]</p>
+      <hr class="rule" />
+      <h2 class="h-section">Where do your medals live right now?</h2>
+      <p class="lede">In a drawer. On a headboard. Your favourite one is facing the wall, behind two others.</p>
+      <p class="mono label problem__resolve" data-problem-resolve>They deserve a wall.</p>
+    </div>
+    <ul class="problem__stage" data-pile role="list">
+      {photos.map((p, i) => (
+        <li class="problem__item" data-pile-item>
+          <Picture src={p.src} alt={p.alt} widths={[320, 640]} sizes="(min-width: 900px) 18vw, 70vw" formats={['avif', 'webp']} />
+          <span class="mono label">[{String(i + 1).padStart(2, '0')}] {p.caption}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .problem { min-height: 100svh; display: grid; align-items: center; padding-block: calc(var(--header-h) + var(--space-12)) var(--space-16); }
+  .problem__inner { display: grid; gap: var(--space-12); }
+  .problem__copy { display: grid; gap: var(--space-6); align-content: start; max-width: 32rem; }
+  .problem__stage { position: relative; list-style: none; display: grid; grid-auto-flow: column; grid-auto-columns: 70vw; gap: var(--space-4); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: var(--space-4); }
+  .problem__item { display: grid; gap: var(--space-2); scroll-snap-align: start; }
+  .problem__item :global(img) { aspect-ratio: 4 / 5; object-fit: cover; width: 100%; }
+  @media (min-width: 900px) {
+    .problem__inner { grid-template-columns: 5fr 7fr; align-items: center; }
+    .problem__stage { grid-auto-flow: row; grid-template-columns: repeat(3, 1fr); grid-auto-columns: auto; overflow: visible; }
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { onPage } from '../scripts/motion/lifecycle';
+  import { pileOffsets } from '../lib/pile';
+  gsap.registerPlugin(ScrollTrigger);
+
+  onPage(() => {
+    const section = document.querySelector<HTMLElement>('[data-problem]');
+    const stage = section?.querySelector<HTMLElement>('[data-pile]');
+    if (!section || !stage) return;
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
+      const items = gsap.utils.toArray<HTMLElement>('[data-pile-item]', stage);
+      // layout positions (offset*), not transformed ones, re-measured on every refresh
+      const offsets = () => pileOffsets(
+        items.map((el) => ({ x: el.offsetLeft, y: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight })),
+        { x: stage.offsetWidth / 2, y: stage.offsetHeight / 2 },
+        7,
+      );
+      let current = offsets();
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section, start: 'top top', end: '+=120%', pin: true, scrub: 0.6, invalidateOnRefresh: true,
+          onRefreshInit: () => { current = offsets(); },
+        },
+      });
+      items.forEach((el, i) => tl.from(el, {
+        x: () => current[i].x, y: () => current[i].y, rotation: () => current[i].rotation, ease: 'power2.inOut', duration: 1,
+      }, i * 0.06));
+      tl.from('[data-problem-resolve]', { autoAlpha: 0, y: 16, duration: 0.4 }, '>-0.2');
+    }, section);
+    return () => mm.revert();
+  });
+</script>
