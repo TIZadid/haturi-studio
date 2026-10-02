@@ -9,7 +9,8 @@
     "test": "vitest run",
     "test:build": "vitest run --config vitest.build.config.ts",
     "test:e2e": "playwright test",
-    "encode": "node scripts/encode-media.mjs"
+    "encode": "node scripts/encode-media.mjs",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",

@@ -4,3 +4,4 @@ dist/
 .media-review/
 test-results/
 playwright-report/
+.wrangler/
