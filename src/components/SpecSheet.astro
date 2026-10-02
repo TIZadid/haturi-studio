@@ -1,0 +1,35 @@
+---
+import { Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+interface Props { product: CollectionEntry<'products'> }
+const { data } = Astro.props.product;
+const photo = data.gallery[0] ?? { src: data.hero, alt: data.heroAlt };
+---
+<section class="section" data-ground="cream">
+  <div class="wrap sheet">
+    <div class="sheet__photo" data-reveal>
+      <Picture src={photo.src} alt={photo.alt} widths={[480, 960]} sizes="(min-width: 900px) 40vw, 92vw" formats={['avif', 'webp']} />
+    </div>
+    <div class="sheet__col">
+      <p class="mono label">{data.code} / Spec sheet</p>
+      <h2 class="h-section">{data.name}</h2>
+      <div class="sheet__body"><slot /></div>
+      <dl class="specs">
+        {data.specs.map((s) => (<div class="specs__row" data-reveal><dt class="mono label">{s.label}</dt><dd>{s.value}</dd></div>))}
+      </dl>
+    </div>
+  </div>
+</section>
+<style>
+  .sheet { display: grid; gap: var(--space-12); }
+  .sheet__photo :global(img) { aspect-ratio: 4 / 5; object-fit: cover; width: 100%; }
+  .sheet__col { display: grid; gap: var(--space-6); align-content: start; }
+  .sheet__body :global(p) { max-width: 38ch; }
+  .specs { display: grid; }
+  .specs__row { display: grid; gap: var(--space-1); padding-block: var(--space-4); border-top: 1px solid var(--hairline); }
+  .specs dd { color: var(--color-ink-head); }
+  @media (min-width: 900px) {
+    .sheet { grid-template-columns: 5fr 6fr; }
+    .sheet__col { border-left: 1px solid var(--hairline); padding-left: var(--space-12); }
+  }
+</style>

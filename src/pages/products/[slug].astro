@@ -1,0 +1,32 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProductHero from '../../components/ProductHero.astro';
+import Annotated from '../../components/Annotated.astro';
+import SpecSheet from '../../components/SpecSheet.astro';
+import Gallery from '../../components/Gallery.astro';
+import Reel from '../../components/Reel.astro';
+import NextProduct from '../../components/NextProduct.astro';
+import { getProducts, videoMap } from '../../lib/products';
+import { mediaUrl, neighbours } from '../../lib/catalog';
+
+export async function getStaticPaths() {
+  const products = await getProducts();
+  return products.map((product) => ({ params: { slug: product.id }, props: { product, all: products } }));
+}
+const { product, all } = Astro.props;
+const { data, id } = product;
+const { Content } = await render(product);
+const next = neighbours(all, id)!.next;
+const reelSrc = data.reel ? mediaUrl(videoMap, id, data.reel.file) : undefined;
+---
+<Base title={data.name} description={data.tagline} image={data.hero}>
+  <main>
+    <ProductHero product={product} />
+    {data.callouts.length > 0 && <Annotated image={data.hero} alt={data.heroAlt} callouts={data.callouts} code={data.code} />}
+    <SpecSheet product={product}><Content /></SpecSheet>
+    {data.gallery.length > 0 && <Gallery images={data.gallery} />}
+    {reelSrc && data.reel && <Reel src={reelSrc} poster={data.reel.poster} code={data.code} />}
+    {next.id !== id && <NextProduct product={next} />}
+  </main>
+</Base>

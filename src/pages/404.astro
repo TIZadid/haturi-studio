@@ -1,0 +1,18 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Not found">
+  <main data-ground="cream" class="nf">
+    <div class="wrap nf__inner">
+      <p class="mono label">[404] / Nothing hangs here</p>
+      <hr class="rule" />
+      <h1 class="wordmark">Wrong shelf.</h1>
+      <a class="mono" href="/" data-cursor="HOME">Back to the workshop →</a>
+    </div>
+  </main>
+</Base>
+<style>
+  .nf { min-height: 100svh; display: grid; align-items: center; }
+  .nf__inner { display: grid; gap: var(--space-6); }
+  .nf h1 { font-size: clamp(64px, 12vw, 200px); }
+</style>
