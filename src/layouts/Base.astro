@@ -10,6 +10,10 @@ import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Grain from '../components/Grain.astro';
+import Cursor from '../components/Cursor.astro';
 
 interface Props { title?: string; description?: string; image?: ImageMetadata }
 const name = 'Haturi Studio';
@@ -40,6 +44,20 @@ const og = image ? await getImage({ src: image, width: 1200, format: 'jpg' }) : 
     <ClientRouter />
   </head>
   <body>
+    <Header />
     <slot />
+    <Footer />
+    <Grain />
+    <Cursor />
+    <script>
+      import { startLifecycle } from '../scripts/motion/lifecycle';
+      import { refreshScroll, startSmooth } from '../scripts/motion/smooth';
+      import { startCursor } from '../scripts/motion/cursor';
+      import '../scripts/motion/reveal';
+      import '../scripts/motion/header';
+      startSmooth();
+      startCursor();
+      startLifecycle(() => requestAnimationFrame(refreshScroll));
+    </script>
   </body>
 </html>

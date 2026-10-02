@@ -1,0 +1,25 @@
+---
+import { igDm } from '../config/site';
+interface Props { label?: string; variant?: 'solid' | 'ghost'; size?: 'sm' | 'md' }
+const { label = 'DM to order', variant = 'solid', size = 'md' } = Astro.props;
+---
+<a class:list={['dm', `dm--${variant}`, `dm--${size}`, 'mono']} href={igDm()} target="_blank" rel="noopener noreferrer" data-dm data-cursor="INSTAGRAM">
+  <span>{label}</span><span aria-hidden="true">→</span>
+</a>
+<style>
+  .dm {
+    display: inline-flex; align-items: center; gap: var(--space-3);
+    border-radius: var(--radius-button); border: 1px solid var(--color-ink-head);
+    transition: background 0.3s var(--ease-out), color 0.3s var(--ease-out), gap 0.3s var(--ease-out);
+  }
+  .dm--md { padding: var(--space-4) var(--space-6); font-size: var(--text-mono-lg); }
+  .dm--sm { padding: var(--space-2) var(--space-4); }
+  .dm--solid { background: var(--color-ink-head); color: var(--color-cream); }
+  .dm--solid:hover { background: transparent; color: var(--color-ink-head); gap: var(--space-4); }
+  .dm--ghost { color: var(--color-ink-head); }
+  .dm--ghost:hover { background: var(--color-ink-head); color: var(--color-cream); gap: var(--space-4); }
+  :global([data-ground="dark"]) .dm, :global([data-on-dark]) .dm { border-color: var(--color-cream); }
+  :global([data-ground="dark"]) .dm--solid, :global([data-on-dark]) .dm--solid { background: var(--color-cream); color: var(--color-dark); }
+  :global([data-ground="dark"]) .dm--solid:hover, :global([data-on-dark]) .dm--solid:hover { background: transparent; color: var(--color-cream); }
+  :global([data-ground="dark"]) .dm--ghost, :global([data-on-dark]) .dm--ghost { color: var(--color-cream); }
+</style>

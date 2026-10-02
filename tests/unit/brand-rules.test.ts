@@ -18,7 +18,7 @@ describe('brand rules (website-handoff/README.md "Never")', () => {
     expect(src).not.toMatch(/(box|text)-shadow\s*:\s*(?!none)/);
   });
   it.each(copy)('%s has no emoji', (f) => {
-    expect(read(f)).not.toMatch(/\p{Extended_Pictographic}/u);
+    expect(read(f)).not.toMatch(/(?![©®™])\p{Extended_Pictographic}/u);
   });
   it.each(globSync(['src/content/**/*.md']))('%s copy has no exclamation marks', (f) => {
     expect(read(f).replace(/^---[\s\S]*?---/, '')).not.toContain('!');

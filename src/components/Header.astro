@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets';
+import markDark from '../assets/brand/mark-dark.png';
+import markCream from '../assets/brand/mark-cream.png';
+import DmButton from './DmButton.astro';
+---
+<header class="header" data-header>
+  <a href="/" class="brand" data-cursor="HOME" aria-label="Haturi Studio, home">
+    <Image src={markDark} alt="" width={28} class="mark mark--dark" />
+    <Image src={markCream} alt="" width={28} class="mark mark--cream" />
+    <span class="mono">Haturi Studio</span>
+  </a>
+  <nav class="nav mono" aria-label="Sections">
+    <a href="/#products">[Products]</a>
+    <a href="/#craft">[Craft]</a>
+    <a href="/#order">[Order]</a>
+  </nav>
+  <DmButton size="sm" variant="ghost" label="DM" />
+</header>
+<style>
+  .header {
+    position: fixed; inset: 0 0 auto 0; z-index: 50; height: var(--header-h);
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-6);
+    padding-inline: var(--gutter);
+    color: var(--color-ink-head);
+    transition: transform 0.5s var(--ease-out), color 0.3s;
+  }
+  .header[data-hidden] { transform: translateY(-100%); }
+  .brand { display: flex; align-items: center; gap: var(--space-3); color: inherit; }
+  .mark { height: 28px; width: auto; }
+  .mark--cream, .header[data-on-dark] .mark--dark { display: none; }
+  .header[data-on-dark] .mark--cream { display: block; }
+  .header[data-on-dark] { color: var(--color-cream); }
+  .header[data-on-dark] a { color: var(--color-cream); }
+  .nav { display: flex; gap: var(--space-6); }
+  .nav a { color: inherit; }
+  @media (max-width: 640px) { .nav { display: none; } .brand .mono { display: none; } }
+</style>

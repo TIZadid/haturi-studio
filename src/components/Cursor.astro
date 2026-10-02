@@ -1,0 +1,16 @@
+<div class="cursor" data-cursor-ring aria-hidden="true" transition:persist><span class="mono"></span></div>
+<style>
+  .cursor {
+    position: fixed; left: 0; top: 0; z-index: 70; pointer-events: none;
+    width: 14px; height: 14px; border-radius: var(--radius-pill);
+    border: 1px solid var(--color-cream); background: transparent;
+    display: grid; place-items: center; opacity: 0;
+    mix-blend-mode: difference;
+    transition: width 0.35s var(--ease-out), height 0.35s var(--ease-out), background 0.35s, opacity 0.3s;
+  }
+  .cursor[data-visible] { opacity: 1; }
+  .cursor span { opacity: 0; color: var(--color-dark); font-size: 10px; transition: opacity 0.2s; }
+  .cursor[data-active] { width: 72px; height: 72px; background: var(--color-cream); }
+  .cursor[data-active] span { opacity: 1; }
+  :global(html[data-cursor-on]), :global(html[data-cursor-on] a), :global(html[data-cursor-on] button) { cursor: none; }
+</style>
