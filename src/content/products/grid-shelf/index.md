@@ -24,6 +24,7 @@ callouts:
   - { label: Shill Karai frame, x: 72, y: 6, side: down }
   - { label: Cross-lap pegs, x: 13, y: 46, side: up }
   - { label: Sixteen slots, x: 42, y: 62, side: down }
+reel: { file: reel.mp4, poster: ./reel-poster.jpg }
 model: grid-shelf
 ---
 

@@ -25,6 +25,7 @@ callouts:
   - { label: Brass hooks, x: 37, y: 11, side: up }
   - { label: Solid teak board, x: 68, y: 22, side: up }
   - { label: Two 12 in rails, x: 45, y: 25, side: down }
+reel: { file: reel.mp4, poster: ./reel-poster.jpg }
 model: medal-hanger
 ---
 
