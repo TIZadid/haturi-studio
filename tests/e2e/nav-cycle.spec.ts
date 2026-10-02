@@ -6,15 +6,15 @@ test('navigation cycles keep one canvas and clean scroll triggers', async ({ pag
   await page.goto('/');
   for (let i = 0; i < 2; i++) {
     await page.locator('#products a[data-product]').first().click();
-    await expect(page.locator('h1')).toHaveText('Hanger.');
+    await expect(page.locator('h1')).toHaveText('Medal Hanger.');
     await expect(page.locator('[data-viewer]')).toHaveAttribute('data-ready', '', { timeout: 30_000 });
     await page.locator('a[data-next]').click();
-    await expect(page.locator('h1')).toHaveText('Grid.');
+    await expect(page.locator('h1')).toHaveText('Grid Shelf.');
     await expect(page.locator('[data-viewer]')).toHaveAttribute('data-ready', '', { timeout: 30_000 });
     await expect(page.locator('canvas')).toHaveCount(1);
     // ClientRouter swaps after goBack resolves; wait for each page before the next step
     await page.goBack();
-    await expect(page.locator('h1')).toHaveText('Hanger.');
+    await expect(page.locator('h1')).toHaveText('Medal Hanger.');
     await page.goBack();
     await expect(page.locator('#products')).toBeAttached();
   }

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-for (const [id, word, other] of [['medal-hanger', 'Hanger.', 'grid-shelf'], ['grid-shelf', 'Grid.', 'medal-hanger']]) {
+for (const [id, word, other] of [['medal-hanger', 'Medal Hanger.', 'grid-shelf'], ['grid-shelf', 'Grid Shelf.', 'medal-hanger']]) {
   test.describe(id, () => {
     test('renders hero, specs, gallery, reel and next link', async ({ page }) => {
       await page.goto(`/products/${id}`);
@@ -49,4 +49,36 @@ test('silent reels do not offer a sound toggle', async ({ page }) => {
   await page.goto('/products/medal-hanger');
   await expect(page.locator('[data-reel]')).toHaveCount(1);
   await expect(page.locator('[data-reel-sound]')).toHaveCount(0);
+});
+
+test('medal hanger page draws its sketch, labelled Teak / Shegun', async ({ page }) => {
+  await page.goto('/products/medal-hanger');
+  const sketch = page.locator('[data-sketch]');
+  await expect(sketch).toHaveCount(1);
+  await expect(sketch.locator('[data-sketch-label]')).toContainText(['Teak / Shegun']);
+  await sketch.scrollIntoViewIfNeeded();
+  await page.mouse.wheel(0, 1600);
+  await page.waitForTimeout(1500);
+  const clip = await sketch.locator('[data-sketch-draw]').evaluate((el) => getComputedStyle(el).clipPath);
+  expect(['none', 'inset(0px)', 'inset(0px 0% 0px 0px)', 'inset(0px 0px 0px 0px)']).toContain(clip);
+});
+
+test('products without a sketch show no sketch section', async ({ page }) => {
+  await page.goto('/products/grid-shelf');
+  await expect(page.locator('[data-sketch]')).toHaveCount(0);
+});
+
+test('the whole sketch and its labels fit on screen while pinned', async ({ page, isMobile }) => {
+  test.skip(isMobile, 'pin is desktop only');
+  await page.setViewportSize({ width: 1440, height: 760 }); // a common laptop height
+  await page.goto('/products/medal-hanger');
+  const top = await page.locator('[data-sketch]').evaluate((el) => el.getBoundingClientRect().top + scrollY);
+  await page.evaluate((y) => scrollTo(0, y + 600), top);
+  await page.waitForTimeout(1200);
+  const vh = page.viewportSize()!.height;
+  for (const pill of await page.locator('[data-sketch-label]').all()) {
+    const b = (await pill.boundingBox())!;
+    expect(b.y).toBeGreaterThanOrEqual(0);
+    expect(b.y + b.height).toBeLessThanOrEqual(vh);
+  }
 });

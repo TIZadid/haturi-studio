@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import ProductHero from '../../components/ProductHero.astro';
 import Annotated from '../../components/Annotated.astro';
 import SpecSheet from '../../components/SpecSheet.astro';
+import Sketch from '../../components/Sketch.astro';
 import Gallery from '../../components/Gallery.astro';
 import Reel from '../../components/Reel.astro';
 import NextProduct from '../../components/NextProduct.astro';
@@ -24,6 +25,7 @@ const reelSrc = data.reel ? mediaUrl(videoMap, id, data.reel.file) : undefined;
   <main>
     <ProductHero product={product} />
     {data.callouts.length > 0 && <Annotated image={data.hero} alt={data.heroAlt} callouts={data.callouts} code={data.code} />}
+    {data.sketch && <Sketch src={data.sketch.src} caption={data.sketch.caption} labels={data.sketch.labels} code={data.code} alt={`Pencil line drawing of the ${data.name}.`} />}
     <SpecSheet product={product}><Content /></SpecSheet>
     {data.gallery.length > 0 && <Gallery images={data.gallery} />}
     {reelSrc && data.reel && <Reel src={reelSrc} poster={data.reel.poster} code={data.code} />}

@@ -1,0 +1,77 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { pad2 } from '../lib/format';
+interface Label { label: string; x: number; y: number; side: 'up' | 'down' }
+interface Props { src: ImageMetadata; caption: string; labels: Label[]; code: string; alt: string }
+const { src, caption, labels, code, alt } = Astro.props;
+---
+<section class="sketch" data-ground="cream" data-sketch>
+  <div class="wrap sketch__inner">
+    <div class="sketch__head">
+      <p class="mono label">[{caption}] / {code}</p>
+      <hr class="rule" />
+    </div>
+    <figure class="sketch__paper">
+      <div class="sketch__draw" data-sketch-draw>
+        <Image src={src} alt={alt} widths={[640, 1280, 1800]} sizes="(min-width: 900px) 80vw, 92vw" />
+      </div>
+      {labels.map((l, i) => (
+        <span class:list={['pin', `pin--${l.side}`]} style={`left:${l.x}%;top:${l.y}%`} data-sketch-pin>
+          <span class="pin__dot mono">{pad2(i + 1)}</span>
+          <span class="pin__line" data-sketch-line></span>
+          <span class="pin__pill mono" data-sketch-label>{l.label}</span>
+        </span>
+      ))}
+    </figure>
+    <ol class="sketch__list mono label" role="list">{labels.map((l, i) => <li>{pad2(i + 1)} / {l.label}</li>)}</ol>
+  </div>
+</section>
+<style>
+  .sketch { padding-block: calc(var(--header-h) + var(--space-8)) var(--space-16); min-height: 100svh; display: grid; align-items: center; }
+  .sketch__inner { display: grid; gap: var(--space-8); }
+  .sketch__head { display: grid; gap: var(--space-4); }
+  .sketch__paper { position: relative; background: var(--color-bg); border: 1px solid var(--card-border); padding: var(--space-6); width: 100%; margin-inline: auto;
+    /* fit the whole drawing and its labels on screen while the section is pinned */
+    max-width: min(1100px, calc((100svh - 260px) * 1.45)); }
+  .sketch__draw :global(img) { width: 100%; }
+  .pin { position: absolute; transform: translate(-50%, -50%); }
+  .pin__dot { width: 22px; height: 22px; border-radius: var(--radius-pill); background: var(--color-ink-head); color: var(--color-cream); display: grid; place-items: center; font-size: 9px; letter-spacing: 0; }
+  .pin__line, .pin__pill { display: none; }
+  .sketch__list { list-style: none; display: grid; gap: var(--space-2); }
+  @media (min-width: 900px) {
+    .pin { display: flex; flex-direction: column; align-items: center; transform: translate(-50%, 0); }
+    .pin--up { flex-direction: column-reverse; transform: translate(-50%, -100%); }
+    .pin__dot { width: 9px; height: 9px; font-size: 0; }
+    .pin__line { display: block; width: 1px; height: 56px; background: var(--color-ink-head); transform-origin: 50% 0; }
+    .pin--up .pin__line { transform-origin: 50% 100%; }
+    .pin__pill { display: block; padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill); border: 1px solid var(--card-border); background: var(--color-cream); color: var(--color-ink-head); white-space: nowrap; }
+    .sketch__list { display: none; }
+  }
+</style>
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { onPage } from '../scripts/motion/lifecycle';
+  gsap.registerPlugin(ScrollTrigger);
+
+  onPage(() => {
+    const section = document.querySelector<HTMLElement>('[data-sketch]');
+    if (!section) return;
+    const mm = gsap.matchMedia();
+    const sequence = (tl: gsap.core.Timeline) => tl
+      .fromTo('[data-sketch-draw]', { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', ease: 'none', duration: 1 })
+      .from('[data-sketch-pin] .pin__dot', { scale: 0, duration: 0.15, stagger: 0.05 })
+      .from('[data-sketch-line]', { scaleY: 0, duration: 0.2, stagger: 0.05 }, '<0.05')
+      .from('[data-sketch-label]', { autoAlpha: 0, y: 8, duration: 0.2, stagger: 0.05 }, '<0.1');
+    // desktop: the section holds still while the pencil draws, so nothing scrolls away mid-drawing
+    mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
+      sequence(gsap.timeline({ scrollTrigger: { trigger: section, start: 'top top', end: '+=110%', pin: true, scrub: 0.5 } }));
+    }, section);
+    // phones: draws by itself once it arrives
+    mm.add('(max-width: 899px) and (prefers-reduced-motion: no-preference)', () => {
+      sequence(gsap.timeline({ defaults: { ease: 'expo.out' }, scrollTrigger: { trigger: section, start: 'top 70%', once: true } })).timeScale(0.7);
+    }, section);
+    return () => mm.revert();
+  });
+</script>

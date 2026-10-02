@@ -1,7 +1,7 @@
 ---
 name: Grid Shelf
 code: HTR—GS
-wordmark: Grid.
+wordmark: Grid Shelf.
 order: 2
 audience: For collectors
 tagline: Sixteen cups. Each one with its own place.

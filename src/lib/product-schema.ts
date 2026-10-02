@@ -29,6 +29,17 @@ export function productSchema<I extends z.ZodTypeAny>(image: () => I) {
         side: z.enum(['up', 'down']).default('up'),
       }))
       .default([]),
+    // optional line drawing that draws itself on scroll, with labels on leader lines (x/y in % of the drawing)
+    sketch: z.object({
+      src: image(),
+      caption: z.string().min(1),
+      labels: z.array(z.object({
+        label: z.string().min(1),
+        x: z.number().min(0).max(100),
+        y: z.number().min(0).max(100),
+        side: z.enum(['up', 'down']).default('up'),
+      })).default([]),
+    }).optional(),
     reel: z.object({ file: z.string().regex(/\.(mp4|webm)$/), poster: image() }).optional(),
     model: z.enum(MODEL_KINDS).optional(),
   });

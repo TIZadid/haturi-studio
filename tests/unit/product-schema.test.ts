@@ -40,6 +40,11 @@ describe('productSchema', () => {
   it('accepts a reel with mp4 file', () => {
     expect(schema.parse({ ...minimal, reel: { file: 'reel.mp4', poster: './reel-poster.jpg' } }).reel?.file).toBe('reel.mp4');
   });
+  it('accepts an optional sketch with labels', () => {
+    const p = schema.parse({ ...minimal, sketch: { src: './sketch.png', caption: 'Drawn before it is cut', labels: [{ label: 'Teak / Shegun', x: 30, y: 80 }] } });
+    expect(p.sketch?.labels[0].side).toBe('up');
+    expect(schema.parse(minimal).sketch).toBeUndefined();
+  });
   it('glob skips folders starting with underscore', () => {
     const found = globSync(PRODUCT_GLOB, { cwd: 'src/content/products' });
     expect(found).not.toContain('_template/index.md');

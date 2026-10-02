@@ -26,7 +26,7 @@ const flip = index % 2 === 1;
   .card { display: grid; gap: var(--space-6); color: var(--color-text); padding-block: var(--space-12); }
   .card:hover { color: var(--color-text); }
   .card__rail { display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
-  .card__word { transition: letter-spacing 0.6s var(--ease-out); }
+  .card__word { font-size: clamp(60px, 10vw, 168px); transition: letter-spacing 0.6s var(--ease-out); }
   .card:hover .card__word { letter-spacing: -0.02em; }
   .card__media { position: relative; }
   .card__img :global(img) { aspect-ratio: 4 / 5; object-fit: cover; width: 100%; }
