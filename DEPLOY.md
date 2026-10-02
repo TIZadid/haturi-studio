@@ -9,10 +9,10 @@ Create an empty repo on github.com: **TIZadid/haturi-studio** (no README, no .gi
 ```bash
 cd ~/Talha/Business/Haturi/site
 git remote add origin git@github.com:TIZadid/haturi-studio.git
-git push -u origin main feat/site-v1
+git push -u origin main
 ```
 
-`main` only has the plan docs for now. The site is on `feat/site-v1` until it is merged.
+All work lives on `main`.
 
 ## 2. Cloudflare preview (first deploy creates the Worker)
 
