@@ -1,0 +1,16 @@
+---
+import { getProducts } from '../lib/products';
+import { pad2 } from '../lib/format';
+import ProductCard from './ProductCard.astro';
+const products = await getProducts();
+---
+<section id="products" class="section" data-ground="white">
+  <div class="wrap">
+    <div class="rail mono label"><span>[The pieces]</span><span>{pad2(products.length)} made / more to come</span></div>
+    <hr class="rule" data-reveal="rule" />
+    {products.map((product, index) => <ProductCard product={product} index={index} />)}
+  </div>
+</section>
+<style>
+  .rail { display: flex; justify-content: space-between; padding-bottom: var(--space-4); }
+</style>

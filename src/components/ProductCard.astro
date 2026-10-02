@@ -1,0 +1,41 @@
+---
+import { Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { bracket, pad2 } from '../lib/format';
+interface Props { product: CollectionEntry<'products'>; index: number }
+const { product, index } = Astro.props;
+const { data, id } = product;
+const flip = index % 2 === 1;
+---
+<a href={`/products/${id}`} class:list={['card', { 'card--flip': flip }]} data-product data-cursor="VIEW">
+  <div class="card__rail mono label"><span>{pad2(index + 1)} / {data.code}</span><span>{bracket(data.audience)}</span><span>{data.released}</span></div>
+  <p class="wordmark card__word" data-reveal>{data.wordmark}</p>
+  <div class="card__media" data-tilt>
+    <div class="card__img" transition:name={`product-${id}`}>
+      <Picture src={data.hero} alt={data.heroAlt} widths={[480, 960, 1440]} sizes="(min-width: 900px) 40vw, 92vw" formats={['avif', 'webp']} />
+    </div>
+    <span class="card__tag mono" data-tilt-layer>{data.status === 'soon' ? 'Coming soon' : 'View the piece →'}</span>
+  </div>
+  <div class="card__copy">
+    <p class="lede">{data.tagline}</p>
+    <ul class="card__specs mono label" role="list">{data.specs.slice(0, 3).map((s) => <li>{s.label} / {s.value}</li>)}</ul>
+  </div>
+  <hr class="rule card__rule" data-reveal="rule" />
+</a>
+<style>
+  .card { display: grid; gap: var(--space-6); color: var(--color-text); padding-block: var(--space-12); }
+  .card:hover { color: var(--color-text); }
+  .card__rail { display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+  .card__word { transition: letter-spacing 0.6s var(--ease-out); }
+  .card:hover .card__word { letter-spacing: -0.02em; }
+  .card__media { position: relative; }
+  .card__img :global(img) { aspect-ratio: 4 / 5; object-fit: cover; width: 100%; }
+  .card__tag { position: absolute; left: var(--space-4); bottom: var(--space-4); padding: var(--space-2) var(--space-3); background: var(--color-cream); color: var(--color-ink-head); transform: translateZ(40px); }
+  .card__copy { display: grid; gap: var(--space-4); }
+  .card__specs { list-style: none; display: grid; gap: var(--space-1); }
+  @media (min-width: 900px) {
+    .card { grid-template-columns: 7fr 5fr; grid-template-areas: 'rail rail' 'word media' 'copy media' 'rule rule'; column-gap: var(--space-12); align-items: end; }
+    .card--flip { grid-template-columns: 5fr 7fr; grid-template-areas: 'rail rail' 'media word' 'media copy' 'rule rule'; }
+    .card__rail { grid-area: rail; } .card__word { grid-area: word; } .card__media { grid-area: media; } .card__copy { grid-area: copy; align-self: start; } .card__rule { grid-area: rule; }
+  }
+</style>

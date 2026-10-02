@@ -1,0 +1,59 @@
+---
+import { Image } from 'astro:assets';
+import drawing from '../assets/craft/drawing.png';
+import poster from '../assets/craft/pencil-poster.jpg';
+import pencil from '../assets/craft/pencil.mp4?url';
+---
+<section id="craft" class="section" data-ground="cream">
+  <div class="wrap craft">
+    <p class="mono label" data-reveal>[The craft] / Notes from the workshop</p>
+    <hr class="rule" data-reveal="rule" />
+    <h2 class="wordmark craft__title" data-reveal>Haturi means hammer.</h2>
+    <hr class="rule" data-reveal="rule" />
+    <div class="craft__media">
+      <figure class="craft__drawing" data-draw-wrap>
+        <Image src={drawing} alt="Pencil line drawing of the Medal Hanger: a board with two rails." widths={[640, 1280]} sizes="(min-width: 900px) 60vw, 92vw" data-draw />
+        <figcaption class="mono label">HTR—MH / 14 × 6 in / Drawn before cut</figcaption>
+      </figure>
+      <video class="craft__video" src={pencil} poster={poster.src} muted loop playsinline preload="none" data-autoplay data-cursor="WATCH"></video>
+    </div>
+    <div class="craft__foot">
+      <p class="mono label">One at a time / Dhaka</p>
+      <p class="lede">Every piece is cut, joined and finished by hand. Solid teak for the hanger, Shill Karai for the shelf. No two boards share a grain.</p>
+    </div>
+  </div>
+</section>
+<style>
+  .craft { display: grid; gap: var(--space-8); }
+  .craft__title { font-size: clamp(56px, 9vw, 160px); }
+  .craft__media { display: grid; gap: var(--space-6); align-items: end; }
+  .craft__drawing { display: grid; gap: var(--space-3); }
+  .craft__video { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; max-height: 80svh; }
+  .craft__foot { display: grid; gap: var(--space-4); }
+  @media (min-width: 900px) {
+    .craft__media { grid-template-columns: 8fr 3fr; }
+    .craft__foot { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { onPage } from '../scripts/motion/lifecycle';
+  gsap.registerPlugin(ScrollTrigger);
+
+  onPage(() => {
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.fromTo('[data-draw]', { clipPath: 'inset(0 100% 0 0)' }, {
+        clipPath: 'inset(0 0% 0 0)', ease: 'none',
+        scrollTrigger: { trigger: '[data-draw-wrap]', start: 'top 80%', end: 'bottom 45%', scrub: true },
+      });
+    });
+    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+      const v = e.target as HTMLVideoElement;
+      if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
+    }), { threshold: 0.25 });
+    document.querySelectorAll('video[data-autoplay]').forEach((v) => io.observe(v));
+    return () => { mm.revert(); io.disconnect(); };
+  });
+</script>

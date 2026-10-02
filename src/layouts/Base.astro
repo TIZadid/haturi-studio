@@ -55,6 +55,7 @@ const og = image ? await getImage({ src: image, width: 1200, format: 'jpg' }) : 
       import { startCursor } from '../scripts/motion/cursor';
       import '../scripts/motion/reveal';
       import '../scripts/motion/header';
+      import '../scripts/motion/tilt';
       startSmooth();
       startCursor();
       startLifecycle(() => requestAnimationFrame(refreshScroll));

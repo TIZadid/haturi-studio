@@ -3,8 +3,29 @@ import { expect, test } from '@playwright/test';
 test.describe('home', () => {
   test('sections appear in the handoff order', async ({ page }) => {
     await page.goto('/');
-    const ids = await page.locator('main > section').evaluateAll((s) => s.map((n) => n.id));
+    const ids = await page.locator('main section[id]').evaluateAll((s) => s.map((n) => n.id));
     expect(ids).toEqual(['top', 'problem', 'products', 'craft', 'order']);
+  });
+
+  test('one product row per product folder, linking to its page', async ({ page }) => {
+    const { globSync } = await import('tinyglobby');
+    const { PRODUCT_GLOB } = await import('../../src/lib/product-schema');
+    const ids = globSync(PRODUCT_GLOB, { cwd: 'src/content/products' }).map((f) => f.split('/')[0]).sort();
+    await page.goto('/');
+    const hrefs = await page.locator('#products a[data-product]').evaluateAll((a) => a.map((n) => n.getAttribute('href')));
+    expect(hrefs.map((h) => h!.replace('/products/', '')).sort()).toEqual(ids);
+  });
+
+  test('craft section has the drawing and the pencil reel', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#craft h2')).toHaveText('Haturi means hammer.');
+    await expect(page.locator('#craft video')).toHaveAttribute('muted', '');
+  });
+
+  test('how to order has three steps and a DM button', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#order [data-step]')).toHaveCount(3);
+    await expect(page.locator('#order a[data-dm]')).toBeVisible();
   });
 
   test('hero has the brand name as h1 and a DM button', async ({ page }) => {

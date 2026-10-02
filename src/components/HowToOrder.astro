@@ -1,0 +1,51 @@
+---
+import DmButton from './DmButton.astro';
+const steps = [
+  { n: '01', title: 'Send a DM.', body: 'Tell us which piece, and what you will put on it.' },
+  { n: '02', title: 'We confirm.', body: 'Size, wood and a date. Each piece is made to order.' },
+  { n: '03', title: 'It arrives.', body: 'Finished by hand in Dhaka, then sent your way.' },
+];
+---
+<section id="order" class="section" data-ground="dark">
+  <div class="wrap order">
+    <p class="mono" data-reveal>[How to order] / Three steps</p>
+    <hr class="rule" data-reveal="rule" />
+    <h2 class="h-section" data-reveal>No cart. Just a message.</h2>
+    <ol class="steps" data-steps role="list">
+      {steps.map((s) => (
+        <li class="step" data-step>
+          <span class="mono">{s.n}</span>
+          <h3>{s.title}</h3>
+          <p>{s.body}</p>
+        </li>
+      ))}
+    </ol>
+    <div class="order__cta"><DmButton /><span class="mono">Handmade in Dhaka / Made to order</span></div>
+  </div>
+</section>
+<style>
+  .order { display: grid; gap: var(--space-8); }
+  .steps { list-style: none; display: grid; gap: var(--space-4); perspective: 1200px; }
+  .step { display: grid; gap: var(--space-4); padding: 28px; border: 1px solid var(--hairline-dark); }
+  .step h3 { font-size: 28px; }
+  .order__cta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-6); }
+  @media (min-width: 900px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+</style>
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { onPage } from '../scripts/motion/lifecycle';
+  gsap.registerPlugin(ScrollTrigger);
+
+  onPage(() => {
+    const mm = gsap.matchMedia();
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      gsap.from('[data-step]', {
+        rotationX: -75, transformOrigin: '50% 100%', autoAlpha: 0, y: 40,
+        duration: 1.1, ease: 'expo.out', stagger: 0.14,
+        scrollTrigger: { trigger: '[data-steps]', start: 'top 82%', once: true },
+      });
+    });
+    return () => mm.revert();
+  });
+</script>
