@@ -10,7 +10,7 @@ for (const [id, word, other] of [['medal-hanger', 'Hanger.', 'grid-shelf'], ['gr
       expect(await page.locator('[data-callout]').count()).toBeGreaterThan(0);
       expect(await page.locator('[data-gallery-track] figure').count()).toBeGreaterThan(0);
       await expect(page.locator('a[data-next]')).toHaveAttribute('href', `/products/${other}`);
-      await expect(page.locator('main a[data-dm]').first()).toBeVisible();
+      await expect(page.locator('main a[data-dm="instagram"]').first()).toBeVisible();
     });
   });
 }
@@ -40,7 +40,7 @@ test('first screen shows the wordmark and the product photo', async ({ page, isM
   expect(Math.abs(img.y - viewer.y)).toBeLessThan(2);
   if (!isMobile) {
     expect(img.y).toBeLessThan(vh * 0.4);
-    const dm = (await page.locator('main a[data-dm]').first().boundingBox())!;
+    const dm = (await page.locator('main a[data-dm="instagram"]').first().boundingBox())!;
     expect(dm.y + dm.height).toBeLessThan(vh);
   }
 });

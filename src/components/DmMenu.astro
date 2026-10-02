@@ -1,0 +1,36 @@
+---
+// Compact header version: a <details> menu, works without JavaScript.
+import { fbDm, igDm } from '../config/site';
+---
+<details class="menu" data-dm-menu>
+  <summary class="menu__btn mono" data-cursor="ORDER">DM <span aria-hidden="true">↓</span></summary>
+  <div class="menu__list mono">
+    <a href={igDm()} target="_blank" rel="noopener noreferrer" data-dm="instagram">Instagram →</a>
+    <a href={fbDm()} target="_blank" rel="noopener noreferrer" data-dm="messenger">Messenger →</a>
+  </div>
+</details>
+<style>
+  .menu { position: relative; }
+  .menu__btn {
+    list-style: none; cursor: pointer; padding: var(--space-2) var(--space-4);
+    border: 1px solid currentColor; border-radius: var(--radius-button);
+  }
+  .menu__btn::-webkit-details-marker { display: none; }
+  .menu__btn span { display: inline-block; transition: transform 0.25s var(--ease-out); }
+  .menu[open] .menu__btn span { transform: rotate(180deg); }
+  .menu__list {
+    position: absolute; right: 0; top: calc(100% + var(--space-2)); min-width: 180px;
+    display: grid; background: var(--color-cream); border: 1px solid var(--card-border);
+  }
+  .menu__list a { padding: var(--space-3) var(--space-4); color: var(--color-ink-head); }
+  .menu__list a + a { border-top: 1px solid var(--hairline); }
+  .menu__list a:hover { background: var(--color-bg); }
+</style>
+<script>
+  // close the menu when clicking elsewhere
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll<HTMLDetailsElement>('[data-dm-menu][open]').forEach((d) => {
+      if (!d.contains(e.target as Node)) d.open = false;
+    });
+  });
+</script>

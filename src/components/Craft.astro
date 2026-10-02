@@ -1,37 +1,58 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
+import log from '../assets/craft/01-log.jpg';
+import plank from '../assets/craft/02-plank.jpg';
 import drawing from '../assets/craft/drawing.png';
-import poster from '../assets/craft/pencil-poster.jpg';
-import pencil from '../assets/craft/pencil.mp4?url';
+import piece from '../assets/craft/04-piece.jpg';
+const steps = [
+  { src: log, n: '01', title: 'Log.', body: 'It starts as a log.', alt: 'Timber logs in low tungsten light.' },
+  { src: plank, n: '02', title: 'Plank.', body: 'Cut into planks.', alt: 'Planks leaning against a brick wall in the workshop.' },
+  { src: drawing, n: '03', title: 'Drawing.', body: 'Drawn before anything is cut.', alt: 'Pencil line drawing of the Medal Hanger.', paper: true },
+  { src: piece, n: '04', title: 'Piece.', body: 'Joined and finished by hand.', alt: 'A finished Grid Shelf full of cups on a counter.' },
+];
 ---
-<section id="craft" class="section" data-ground="cream">
+<section id="craft" class="section" data-ground="cream" data-craft>
   <div class="wrap craft">
-    <p class="mono label" data-reveal>[The craft] / Notes from the workshop</p>
-    <hr class="rule" data-reveal="rule" />
-    <h2 class="wordmark craft__title" data-reveal>Haturi means hammer.</h2>
-    <hr class="rule" data-reveal="rule" />
-    <div class="craft__media">
-      <figure class="craft__drawing" data-draw-wrap>
-        <Image src={drawing} alt="Pencil line drawing of the Medal Hanger: a board with two rails." widths={[640, 1280]} sizes="(min-width: 900px) 60vw, 92vw" data-draw />
-        <figcaption class="mono label">HTR—MH / 14 × 6 in / Drawn before cut</figcaption>
-      </figure>
-      <video class="craft__video" src={pencil} poster={poster.src} muted loop playsinline preload="none" data-autoplay data-cursor="WATCH"></video>
+    <div class="craft__head">
+      <p class="mono label" data-reveal>[The craft] / Notes from the workshop</p>
+      <hr class="rule" data-reveal="rule" />
+      <h2 class="wordmark craft__title" data-reveal>Haturi means hammer.</h2>
+      <hr class="rule" data-reveal="rule" />
     </div>
+    <ol class="craft__steps" role="list">
+      {steps.map((s) => (
+        <li class="step" data-step-craft>
+          <div class:list={['step__media', { 'step__media--paper': s.paper }]}>
+            <Picture src={s.src} alt={s.alt} widths={[400, 800, 1200]} sizes="(min-width: 900px) 22vw, 46vw" formats={['avif', 'webp']} />
+          </div>
+          <span class="mono label">{s.n}</span>
+          <h3 class="step__title">{s.title}</h3>
+          <p class="step__body">{s.body}</p>
+        </li>
+      ))}
+    </ol>
     <div class="craft__foot">
       <p class="mono label">One at a time / Dhaka</p>
-      <p class="lede">Every piece is cut, joined and finished by hand. Solid teak for the hanger, Shill Karai for the shelf. No two boards share a grain.</p>
+      <p class="lede">Solid teak for the hanger, Shill Karai for the shelf. Every piece is cut, joined and finished by hand. No two boards share a grain.</p>
     </div>
   </div>
 </section>
 <style>
-  .craft { display: grid; gap: var(--space-8); }
-  .craft__title { font-size: clamp(56px, 9vw, 160px); }
-  .craft__media { display: grid; gap: var(--space-6); align-items: end; }
-  .craft__drawing { display: grid; gap: var(--space-3); }
-  .craft__video { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; max-height: 80svh; }
-  .craft__foot { display: grid; gap: var(--space-4); }
+  .craft { display: grid; gap: var(--space-12); }
+  .craft__head { display: grid; gap: var(--space-6); }
+  .craft__title { font-size: clamp(52px, 9vw, 160px); }
+  .craft__steps { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-8) var(--space-4); }
+  .step { display: grid; gap: var(--space-2); align-content: start; }
+  .step__media { overflow: clip; margin-bottom: var(--space-3); background: var(--color-dark); }
+  .step__media--paper { background: var(--color-bg); border: 1px solid var(--card-border); }
+  .step__media :global(img) { aspect-ratio: 3 / 4; object-fit: cover; width: 100%; transition: transform 1s var(--ease-out); }
+  .step__media--paper :global(img) { object-fit: contain; padding: var(--space-4); }
+  .step:hover .step__media :global(img) { transform: scale(1.05); }
+  .step__title { font-size: 28px; }
+  .step__body { color: var(--color-text); }
+  .craft__foot { display: grid; gap: var(--space-4); padding-top: var(--space-6); border-top: 1px solid var(--hairline); }
   @media (min-width: 900px) {
-    .craft__media { grid-template-columns: 8fr 3fr; }
+    .craft__steps { grid-template-columns: repeat(4, 1fr); gap: var(--space-6); }
     .craft__foot { grid-template-columns: 1fr 1fr; }
   }
 </style>
@@ -42,18 +63,16 @@ import pencil from '../assets/craft/pencil.mp4?url';
   gsap.registerPlugin(ScrollTrigger);
 
   onPage(() => {
+    const root = document.querySelector<HTMLElement>('[data-craft]');
+    if (!root) return;
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
-      gsap.fromTo('[data-draw]', { clipPath: 'inset(0 100% 0 0)' }, {
-        clipPath: 'inset(0 0% 0 0)', ease: 'none',
-        scrollTrigger: { trigger: '[data-draw-wrap]', start: 'top 80%', end: 'bottom 45%', scrub: true },
+      // plays once on arrival at a fixed pace, so you see the whole sequence without scrolling it away
+      gsap.from('[data-step-craft] .step__media', {
+        clipPath: 'inset(100% 0% 0% 0%)', duration: 0.9, ease: 'expo.out', stagger: 0.12,
+        scrollTrigger: { trigger: '.craft__steps', start: 'top 85%', once: true },
       });
-    });
-    const io = new IntersectionObserver((entries) => entries.forEach((e) => {
-      const v = e.target as HTMLVideoElement;
-      if (e.isIntersecting) v.play().catch(() => {}); else v.pause();
-    }), { threshold: 0.25 });
-    document.querySelectorAll('video[data-autoplay]').forEach((v) => io.observe(v));
-    return () => { mm.revert(); io.disconnect(); };
+    }, root);
+    return () => mm.revert();
   });
 </script>

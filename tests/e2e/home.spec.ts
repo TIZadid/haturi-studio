@@ -16,29 +16,33 @@ test.describe('home', () => {
     expect(hrefs.map((h) => h!.replace('/products/', '')).sort()).toEqual(ids);
   });
 
-  test('craft section has the drawing and the pencil reel', async ({ page }) => {
+  test('craft section has the title and the pencil drawing', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('#craft h2')).toHaveText('Haturi means hammer.');
-    await expect(page.locator('#craft video')).toHaveAttribute('muted', '');
+    await expect(page.locator('#craft img[alt*="drawing"]')).toHaveCount(1);
   });
 
   test('how to order has three steps and a DM button', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('#order [data-step]')).toHaveCount(3);
-    await expect(page.locator('#order a[data-dm]')).toBeVisible();
+    await expect(page.locator('#order a[data-dm="instagram"]')).toBeVisible();
   });
 
   test('hero has the brand name as h1 and a DM button', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('#top h1')).toHaveAccessibleName('Haturi Studio');
-    await expect(page.locator('#top a[data-dm]')).toBeVisible();
+    await expect(page.locator('#top a[data-dm="instagram"]')).toBeVisible();
   });
 
-  test('hero photo covers the whole hero', async ({ page }) => {
+  test('each hero photo fills its panel', async ({ page }) => {
     await page.goto('/');
-    const hero = (await page.locator('#top').boundingBox())!;
-    const img = (await page.locator('#top [data-hero-media] img').boundingBox())!;
-    expect(img.height).toBeGreaterThanOrEqual(hero.height - 1);
+    await page.waitForTimeout(1600);
+    for (const panel of await page.locator('#top [data-hero-panel]').all()) {
+      const box = (await panel.boundingBox())!;
+      const img = (await panel.locator('img').boundingBox())!;
+      expect(img.height).toBeGreaterThanOrEqual(box.height - 1);
+      expect(img.width).toBeGreaterThanOrEqual(box.width - 1);
+    }
   });
 
   test('problem pile settles into a grid after scrolling through', async ({ page, isMobile }) => {

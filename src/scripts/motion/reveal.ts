@@ -12,9 +12,9 @@ onPage(() => {
       .filter((el) => el.getBoundingClientRect().top > innerHeight)
       .forEach((el) => gsap.set(el, { autoAlpha: 0 }));
     ScrollTrigger.batch('[data-reveal]:not([data-reveal="rule"])', {
-      start: 'top 88%',
+      start: 'top 94%',
       once: true,
-      onEnter: (els) => gsap.fromTo(els, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 1, ease: 'expo.out', stagger: 0.08 }),
+      onEnter: (els) => gsap.fromTo(els, { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.06 }),
     });
     gsap.utils.toArray<HTMLElement>('[data-reveal="rule"]').forEach((el) =>
       gsap.fromTo(el, { scaleX: 0, transformOrigin: '0 50%' }, {

@@ -1,17 +1,20 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('site chrome', () => {
-  test('header DM link goes to Instagram DM in a new tab', async ({ page }) => {
+  test('header DM links open Instagram and Messenger in a new tab', async ({ page }) => {
     await page.goto('/');
-    const dm = page.locator('header a[data-dm]');
-    await expect(dm).toHaveAttribute('href', /^https:\/\/ig\.me\/m\/[a-z0-9._]+$/);
-    await expect(dm).toHaveAttribute('target', '_blank');
-    await expect(dm).toHaveAttribute('rel', /noopener/);
+    const ig = page.locator('header a[data-dm="instagram"]');
+    await expect(ig).toHaveAttribute('href', /^https:\/\/ig\.me\/m\/[a-z0-9._]+$/);
+    await expect(page.locator('header a[data-dm="messenger"]')).toHaveAttribute('href', /^https:\/\/m\.me\/[a-z0-9.]+$/);
+    for (const a of await page.locator('header a[data-dm]').all()) {
+      await expect(a).toHaveAttribute('target', '_blank');
+      await expect(a).toHaveAttribute('rel', /noopener/);
+    }
   });
 
   test('footer shows wordmark and instagram handle', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('footer .wordmark')).toHaveText('Haturi.');
+    await expect(page.locator('footer .wordmark')).toHaveText('Haturi Studio.');
     await expect(page.locator('footer a[href*="instagram.com"]')).toBeVisible();
   });
 

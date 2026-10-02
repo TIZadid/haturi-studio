@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import markDark from '../assets/brand/mark-dark.png';
 import markCream from '../assets/brand/mark-cream.png';
-import DmButton from './DmButton.astro';
+import DmMenu from './DmMenu.astro';
 ---
 <header class="header" data-header>
   <a href="/" class="brand" data-cursor="HOME" aria-label="Haturi Studio, home">
@@ -15,7 +15,7 @@ import DmButton from './DmButton.astro';
     <a href="/#craft">[Craft]</a>
     <a href="/#order">[Order]</a>
   </nav>
-  <DmButton size="sm" variant="ghost" label="DM" />
+  <DmMenu />
 </header>
 <style>
   .header {

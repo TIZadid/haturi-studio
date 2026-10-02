@@ -1,8 +1,8 @@
 ---
 import DmButton from './DmButton.astro';
 const steps = [
-  { n: '01', title: 'Send a DM.', body: 'Tell us which piece, and what you will put on it.' },
-  { n: '02', title: 'We confirm.', body: 'Size, wood and a date. Each piece is made to order.' },
+  { n: '01', title: 'Send a DM.', body: 'On Instagram or Messenger. Tell us which piece.' },
+  { n: '02', title: 'We confirm.', body: 'Availability, delivery and a date. No forms.' },
   { n: '03', title: 'It arrives.', body: 'Finished by hand in Dhaka, then sent your way.' },
 ];
 ---
@@ -20,7 +20,7 @@ const steps = [
         </li>
       ))}
     </ol>
-    <div class="order__cta"><DmButton /><span class="mono">Handmade in Dhaka / Made to order</span></div>
+    <div class="order__cta"><DmButton /><span class="mono">Handmade in Dhaka / One at a time</span></div>
   </div>
 </section>
 <style>
@@ -28,7 +28,7 @@ const steps = [
   .steps { list-style: none; display: grid; gap: var(--space-4); perspective: 1200px; }
   .step { display: grid; gap: var(--space-4); padding: 28px; border: 1px solid var(--hairline-dark); }
   .step h3 { font-size: 28px; }
-  .order__cta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-6); }
+  .order__cta { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-6); }
   @media (min-width: 900px) { .steps { grid-template-columns: repeat(3, 1fr); } }
 </style>
 <script>
@@ -41,9 +41,9 @@ const steps = [
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.from('[data-step]', {
-        rotationX: -75, transformOrigin: '50% 100%', autoAlpha: 0, y: 40,
-        duration: 1.1, ease: 'expo.out', stagger: 0.14,
-        scrollTrigger: { trigger: '[data-steps]', start: 'top 82%', once: true },
+        rotationX: -60, transformOrigin: '50% 100%', autoAlpha: 0, y: 24,
+        duration: 0.8, ease: 'expo.out', stagger: 0.1,
+        scrollTrigger: { trigger: '[data-steps]', start: 'top 92%', once: true },
       });
     });
     return () => mm.revert();

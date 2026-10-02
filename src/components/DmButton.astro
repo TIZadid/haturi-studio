@@ -1,25 +1,37 @@
 ---
-import { igDm } from '../config/site';
-interface Props { label?: string; variant?: 'solid' | 'ghost'; size?: 'sm' | 'md' }
-const { label = 'DM to order', variant = 'solid', size = 'md' } = Astro.props;
+// Two-channel order CTA: a mono label over a pair of buttons, Instagram first.
+import { fbDm, igDm } from '../config/site';
+interface Props { label?: string }
+const { label = 'DM to order' } = Astro.props;
 ---
-<a class:list={['dm', `dm--${variant}`, `dm--${size}`, 'mono']} href={igDm()} target="_blank" rel="noopener noreferrer" data-dm data-cursor="INSTAGRAM">
-  <span>{label}</span><span aria-hidden="true">→</span>
-</a>
+<div class="dm" role="group" aria-label={label}>
+  <span class="dm__label mono">{label}</span>
+  <div class="dm__pair">
+    <a class="dm__btn dm__btn--solid mono" href={igDm()} target="_blank" rel="noopener noreferrer" data-dm="instagram" data-cursor="INSTAGRAM">
+      <span>Instagram</span><span aria-hidden="true">→</span>
+    </a>
+    <a class="dm__btn mono" href={fbDm()} target="_blank" rel="noopener noreferrer" data-dm="messenger" data-cursor="MESSENGER">
+      <span>Messenger</span><span aria-hidden="true">→</span>
+    </a>
+  </div>
+</div>
 <style>
-  .dm {
+  .dm { display: inline-grid; gap: var(--space-2); }
+  .dm__label { color: var(--color-ink-label); }
+  .dm__pair { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .dm__btn {
     display: inline-flex; align-items: center; gap: var(--space-3);
-    border-radius: var(--radius-button); border: 1px solid var(--color-ink-head);
-    transition: background 0.3s var(--ease-out), color 0.3s var(--ease-out), gap 0.3s var(--ease-out);
+    padding: var(--space-4) var(--space-6); font-size: var(--text-mono-lg);
+    border-radius: var(--radius-button); border: 1px solid var(--color-ink-head); color: var(--color-ink-head);
+    transition: background 0.25s var(--ease-out), color 0.25s var(--ease-out), gap 0.25s var(--ease-out), transform 0.25s var(--ease-out);
   }
-  .dm--md { padding: var(--space-4) var(--space-6); font-size: var(--text-mono-lg); }
-  .dm--sm { padding: var(--space-2) var(--space-4); }
-  .dm--solid { background: var(--color-ink-head); color: var(--color-cream); }
-  .dm--solid:hover { background: transparent; color: var(--color-ink-head); gap: var(--space-4); }
-  .dm--ghost { color: var(--color-ink-head); }
-  .dm--ghost:hover { background: var(--color-ink-head); color: var(--color-cream); gap: var(--space-4); }
-  :global([data-ground="dark"]) .dm, :global([data-on-dark]) .dm { border-color: var(--color-cream); }
-  :global([data-ground="dark"]) .dm--solid, :global([data-on-dark]) .dm--solid { background: var(--color-cream); color: var(--color-dark); }
-  :global([data-ground="dark"]) .dm--solid:hover, :global([data-on-dark]) .dm--solid:hover { background: transparent; color: var(--color-cream); }
-  :global([data-ground="dark"]) .dm--ghost, :global([data-on-dark]) .dm--ghost { color: var(--color-cream); }
+  .dm__btn:hover { gap: var(--space-4); transform: translateY(-2px); }
+  .dm__btn--solid { background: var(--color-ink-head); color: var(--color-cream); }
+  .dm__btn--solid:hover { color: var(--color-cream); }
+  .dm__btn:not(.dm__btn--solid):hover { background: var(--color-ink-head); color: var(--color-cream); }
+  :global([data-ground="dark"]) .dm__label { color: var(--color-on-dark-mono); }
+  :global([data-ground="dark"]) .dm__btn { border-color: var(--color-cream); color: var(--color-cream); }
+  :global([data-ground="dark"]) .dm__btn--solid { background: var(--color-cream); color: var(--color-dark); }
+  :global([data-ground="dark"]) .dm__btn--solid:hover { color: var(--color-dark); }
+  :global([data-ground="dark"]) .dm__btn:not(.dm__btn--solid):hover { background: var(--color-cream); color: var(--color-dark); }
 </style>

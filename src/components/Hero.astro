@@ -1,16 +1,28 @@
 ---
 import { Image, Picture } from 'astro:assets';
-import hero from '../assets/home/hero.jpg';
+import hanger from '../assets/home/hero-hanger.jpg';
+import shelf from '../assets/home/hero-shelf.jpg';
 import mark from '../assets/brand/mark-cream.png';
 import DmButton from './DmButton.astro';
 import { dotDate } from '../lib/format';
 const lines = ['Haturi', 'Studio'];
+const panels = [
+  { href: '/products/medal-hanger', src: hanger, n: '01', name: 'Medal Hanger', audience: 'For runners', alt: 'A teak Medal Hanger on a blue wall, loaded with race medals.' },
+  { href: '/products/grid-shelf', src: shelf, n: '02', name: 'Grid Shelf', audience: 'For collectors', alt: 'The Grid Shelf full of cups on a coffee counter, warm light.' },
+];
 ---
 <section id="top" class="hero" data-ground="dark" data-hero>
-  <div class="hero__media" data-hero-media>
-    <Picture src={hero} alt="Finished hangers stacked in low tungsten light." widths={[640, 1280, 1920]} sizes="100vw" formats={['avif', 'webp']} loading="eager" fetchpriority="high" />
+  <div class="hero__panels">
+    {panels.map((p) => (
+      <a class="panel" href={p.href} data-hero-panel data-cursor="VIEW">
+        <div class="panel__media" data-hero-media>
+          <Picture src={p.src} alt={p.alt} widths={[640, 960, 1280, 1920]} sizes="(min-width: 900px) 60vw, 100vw" formats={['avif', 'webp']} loading="eager" fetchpriority="high" />
+        </div>
+        <span class="panel__scrim" aria-hidden="true"></span>
+        <span class="panel__label mono"><span class="panel__rule" aria-hidden="true"></span><span>[{p.n}] {p.name}<span class="panel__aud"> / {p.audience}</span></span> <span class="panel__arrow" aria-hidden="true">→</span></span>
+      </a>
+    ))}
   </div>
-  <div class="hero__scrim" aria-hidden="true"></div>
   <div class="hero__block" data-hero-block>
     <Image src={mark} alt="" width={56} class="hero__mark" data-hero-mark />
     <h1 class="h-hero" aria-label="Haturi Studio">
@@ -20,30 +32,53 @@ const lines = ['Haturi', 'Studio'];
     </h1>
     <hr class="rule hero__rule" data-hero-rule />
     <div class="hero__meta" data-hero-meta>
-      <p class="mono">For the things you earned</p>
+      <p class="mono">Wooden pieces for the things you keep</p>
       <p class="mono">Handmade in Dhaka / {dotDate(new Date())}</p>
-      <DmButton />
+      <div class="hero__cta"><DmButton /></div>
     </div>
   </div>
-  <p class="hero__cue mono" aria-hidden="true"><span class="cue-rule"></span>Scroll ↓</p>
 </section>
 
 <style>
-  .hero { position: relative; height: 100svh; min-height: 560px; overflow: clip; display: grid; place-items: center; }
-  .hero__media, .hero__scrim { position: absolute; inset: 0; }
-  .hero__media :global(picture) { height: 100%; }
-  .hero__media :global(img) { width: 100%; height: 100%; object-fit: cover; }
-  .hero__scrim { background: var(--scrim); }
-  .hero__block { position: relative; display: grid; justify-items: center; gap: var(--space-6); padding-inline: var(--gutter); }
-  .hero__mark { height: 56px; width: auto; }
+  .hero { position: relative; height: 100svh; min-height: 620px; overflow: clip; }
+  .hero__panels { position: absolute; inset: 0; display: flex; }
+  .panel { position: relative; flex: 1 1 0; overflow: clip; transition: flex-grow 0.8s var(--ease-out); }
+  .panel__media, .panel__scrim { position: absolute; inset: 0; }
+  .panel__media :global(picture) { height: 100%; }
+  .panel__media :global(img) { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-out); }
+  .panel__scrim { background: var(--scrim); transition: opacity 0.6s var(--ease-out); }
+  .panel__label {
+    position: absolute; left: var(--space-4); right: var(--space-4); bottom: var(--space-6); z-index: 2;
+    display: flex; align-items: center; gap: var(--space-3); color: var(--color-cream);
+  }
+  .panel__aud, .panel__rule { display: none; }
+  .panel__rule { width: 32px; border-top: 1px solid var(--hairline-dark); transition: width 0.6s var(--ease-out); }
+  .panel__arrow { transition: transform 0.4s var(--ease-out); }
+  .panel:hover .panel__rule { width: 64px; }
+  .panel:hover .panel__arrow { transform: translateX(6px); }
+  .panel:hover .panel__media :global(img) { transform: scale(1.04); }
+  .panel:hover .panel__scrim { opacity: 0.6; }
+
+  .hero__block {
+    position: absolute; inset: 0; z-index: 3; pointer-events: none;
+    display: grid; place-content: center; justify-items: center; gap: var(--space-4);
+    padding-inline: var(--gutter); text-align: center;
+  }
+  .hero__mark { height: 52px; width: auto; }
   h1 { display: grid; justify-items: center; color: var(--color-cream); text-transform: uppercase; }
   .line { display: block; overflow: hidden; padding-bottom: 0.04em; }
   .char { display: inline-block; }
   .hero__rule { width: 120px; }
-  .hero__meta { display: grid; justify-items: center; gap: var(--space-3); }
-  .hero__meta :global(.dm) { margin-top: var(--space-4); }
-  .hero__cue { position: absolute; left: var(--gutter); bottom: var(--space-8); display: flex; align-items: center; gap: var(--space-3); }
-  .cue-rule { width: 40px; border-top: 1px solid var(--hairline-dark); }
+  .hero__meta { display: grid; justify-items: center; gap: var(--space-2); }
+  .hero__cta { pointer-events: auto; margin-top: var(--space-4); }
+  .hero__cta :global(.dm__label) { display: none; }
+
+  @media (min-width: 900px) {
+    .panel:hover { flex-grow: 1.3; }
+    .panel__label { left: var(--gutter); right: auto; bottom: var(--space-8); }
+    .panel__aud { display: inline; }
+    .panel__rule { display: block; }
+  }
 </style>
 
 <script>
@@ -58,13 +93,15 @@ const lines = ['Haturi', 'Studio'];
     const mm = gsap.matchMedia();
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.timeline({ defaults: { ease: 'expo.out' } })
-        .fromTo('[data-hero-mark]', { rotation: -40, transformOrigin: '75% 85%' }, { rotation: 8, duration: 0.35, ease: 'power3.in' })
+        .from('[data-hero-panel]', { clipPath: 'inset(50% 0% 50% 0%)', duration: 1.2, stagger: 0.12, ease: 'expo.inOut' })
+        .fromTo('[data-hero-mark]', { rotation: -40, transformOrigin: '75% 85%' }, { rotation: 8, duration: 0.3, ease: 'power3.in' }, '-=0.5')
         .to('[data-hero-mark]', { rotation: 0, duration: 0.9, ease: 'elastic.out(1, 0.35)' })
-        .from('[data-hero-rule]', { scaleX: 0, duration: 0.9 }, '<')
-        .from('[data-hero-char]', { yPercent: 110, duration: 1, stagger: 0.03 }, '<0.05')
-        .from('[data-hero-meta] > *', { autoAlpha: 0, y: 12, stagger: 0.08, duration: 0.8 }, '-=0.6');
-      gsap.fromTo('[data-hero-media]', { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
-      gsap.to('[data-hero-block]', { yPercent: -25, autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: '70% top', scrub: true } });
+        .from('[data-hero-rule]', { scaleX: 0, duration: 0.8 }, '<')
+        .from('[data-hero-char]', { yPercent: 110, duration: 0.9, stagger: 0.03 }, '<0.05')
+        .from('[data-hero-meta] > *', { autoAlpha: 0, y: 12, stagger: 0.08, duration: 0.7 }, '-=0.6');
+      // gentle parallax only; the block leaves as the hero scrolls out
+      gsap.to('[data-hero-media]', { yPercent: 8, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
+      gsap.to('[data-hero-block]', { yPercent: -18, autoAlpha: 0, ease: 'none', scrollTrigger: { trigger: hero, start: '20% top', end: '75% top', scrub: true } });
     }, hero);
     return () => mm.revert();
   });
