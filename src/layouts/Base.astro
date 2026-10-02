@@ -56,6 +56,12 @@ const og = image ? await getImage({ src: image, width: 1200, format: 'jpg' }) : 
       import '../scripts/motion/reveal';
       import '../scripts/motion/header';
       import '../scripts/motion/tilt';
+      // Chrome aborts a view transition if the viewport resizes mid-swap (mobile URL bar). The page
+      // still navigates; only the animation is skipped, so this one rejection is expected noise.
+      addEventListener('unhandledrejection', (e) => {
+        const r = e.reason as { name?: string; message?: string } | undefined;
+        if (r?.name === 'InvalidStateError' && /Transition was aborted/.test(r.message ?? '')) e.preventDefault();
+      });
       startSmooth();
       startCursor();
       startLifecycle(() => requestAnimationFrame(refreshScroll));

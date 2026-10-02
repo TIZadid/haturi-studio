@@ -2,7 +2,9 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: 'tests/e2e',
-  timeout: 45_000,
+  timeout: 60_000,
+  // software WebGL is CPU-heavy; more workers starve the 3D viewers
+  workers: 2,
   use: { baseURL: 'http://localhost:4321' },
   webServer: {
     command: 'npm run build && npm run preview',

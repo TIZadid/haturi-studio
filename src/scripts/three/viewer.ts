@@ -20,9 +20,10 @@ export async function mountViewer(el: HTMLElement): Promise<() => void> {
   const stage = el.querySelector<HTMLElement>('.viewer__stage');
   if (!kind || !stage || !webglAvailable()) return () => {};
 
-  const [THREE, { OrbitControls }, factory] = await Promise.all([
+  const [THREE, { OrbitControls }, { RoomEnvironment }, factory] = await Promise.all([
     import('three'),
     import('three/examples/jsm/controls/OrbitControls.js'),
+    import('three/examples/jsm/environments/RoomEnvironment.js'),
     models[kind](),
   ]);
   const reduced = reducedMotion();
@@ -50,6 +51,11 @@ export async function mountViewer(el: HTMLElement): Promise<() => void> {
   stage.appendChild(renderer.domElement);
 
   const scene = new THREE.Scene();
+  // a soft studio room for reflections, so metal and oiled wood read as materials, not flat colour
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environment = envTex;
+  scene.environmentIntensity = 0.45;
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 500);
   scene.add(new THREE.HemisphereLight(tokenColor('--color-cream'), tokenColor('--color-accent-2-900'), 0.9));
   const key = new THREE.DirectionalLight(tokenColor('--color-accent-2-200'), 3);
@@ -137,6 +143,8 @@ export async function mountViewer(el: HTMLElement): Promise<() => void> {
     m.dispose();
     wall.geometry.dispose();
     (wall.material as import('three').Material).dispose();
+    envTex.dispose();
+    pmrem.dispose();
     renderer.dispose();
     renderer.domElement.remove();
     delete el.dataset.ready;
