@@ -39,3 +39,12 @@ for (const [id, max] of [['medal-hanger', 14], ['grid-shelf', 16]] as const) {
     await expect(viewer).toHaveAttribute('data-count', '0');
   });
 }
+
+for (const [id, start] of [['medal-hanger', 3], ['grid-shelf', 4]] as const) {
+  test(`${id}: starts with ${start} pieces so it reads as the product in use`, async ({ page }) => {
+    await page.goto(`/products/${id}`);
+    const viewer = page.locator(`[data-viewer="${id}"]`);
+    await expect(viewer).toHaveAttribute('data-ready', '', { timeout: 30_000 });
+    await expect(viewer).toHaveAttribute('data-count', String(start));
+  });
+}

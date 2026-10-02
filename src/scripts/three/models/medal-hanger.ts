@@ -65,7 +65,7 @@ export const createMedalHanger: ModelFactory = (ctx) => {
   let clock = 0;
   const zRail = zFront + RAIL.standoff + RAIL.size + 0.05;
 
-  function hang(slot: number) {
+  function hang(slot: number, settled = false) {
     const railIdx = slot < PER_RAIL ? 0 : 1;
     const railY = RAIL.ys[railIdx] + RAIL.size / 2;
     const group = new THREE.Group();
@@ -83,8 +83,11 @@ export const createMedalHanger: ModelFactory = (ctx) => {
     group.add(left, right, disc, rim);
     group.position.set(slotsX[slot % PER_RAIL] + (railIdx ? 0.35 : 0), railY, zRail + railIdx * 0.2);
     root.add(group);
-    medals.push({ group, slot, born: clock, railY });
+    medals.push({ group, slot, born: settled ? -100 : clock, railY });
   }
+
+  // start with a few medals so it reads as a hanger in use, and invites the next tap
+  for (const slot of [1, 4, 9]) hang(slot, true);
 
   return {
     root,

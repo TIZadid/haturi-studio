@@ -49,7 +49,7 @@ export const createGridShelf: ModelFactory = (ctx) => {
   const cups: Cup[] = [];
   let clock = 0;
 
-  function place(slot: number) {
+  function place(slot: number, settled = false) {
     const s = slots[slot];
     const floor = s.y - rowH / 2 + SHELF / 2;
     const group = new THREE.Group();
@@ -63,8 +63,11 @@ export const createGridShelf: ModelFactory = (ctx) => {
     group.position.set(s.x, floor, 0.2);
     group.rotation.y = ((slot * 37) % 120) * (Math.PI / 180) - Math.PI / 3;
     root.add(group);
-    cups.push({ group, slot, born: clock, floor });
+    cups.push({ group, slot, born: settled ? -100 : clock, floor });
   }
+
+  // a few cups already in place, so it reads as a shelf in use
+  for (const slot of [1, 6, 8, 15]) place(slot, true);
 
   return {
     root,
