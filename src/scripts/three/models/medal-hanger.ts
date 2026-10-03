@@ -5,7 +5,10 @@ import { makeWood } from '../wood';
 import type { ModelFactory } from './types';
 
 export const BOARD = { w: 14, h: 6, d: 0.75 };
-export const RAIL = { len: 12, size: 0.75, standoff: 0.75, ys: [1.4, -1.4] };
+// the upper rail stands further off the board than the lower one, so top medals hang in front of the bottom ones
+export const RAIL = { len: 12, size: 0.75, rails: [{ y: 1.4, standoff: 1.6 }, { y: -1.4, standoff: 0.6 }] };
+export const railFrontZ = (i: number) => BOARD.d / 2 + RAIL.rails[i].standoff + RAIL.size;
+export const medalZ = (i: number) => railFrontZ(i) + 0.05;
 const PER_RAIL = 8;
 const DROP = 0.55;
 
@@ -29,14 +32,14 @@ export const createMedalHanger: ModelFactory = (ctx) => {
   root.add(board);
 
   const zFront = BOARD.d / 2;
-  for (const y of RAIL.ys) {
+  for (const { y, standoff } of RAIL.rails) {
     const rail = new THREE.Mesh(box(RAIL.len, RAIL.size, RAIL.size), wood);
-    rail.position.set(0, y, zFront + RAIL.standoff + RAIL.size / 2);
+    rail.position.set(0, y, zFront + standoff + RAIL.size / 2);
     rail.castShadow = true;
     root.add(rail);
     for (const x of [-RAIL.len / 2 + RAIL.size / 2, RAIL.len / 2 - RAIL.size / 2]) {
-      const block = new THREE.Mesh(box(RAIL.size, RAIL.size, RAIL.standoff), wood);
-      block.position.set(x, y, zFront + RAIL.standoff / 2);
+      const block = new THREE.Mesh(box(RAIL.size, RAIL.size, standoff), wood);
+      block.position.set(x, y, zFront + standoff / 2);
       block.castShadow = true;
       root.add(block);
     }
@@ -63,11 +66,10 @@ export const createMedalHanger: ModelFactory = (ctx) => {
   type Medal = { group: T.Group; slot: number; born: number; railY: number };
   const medals: Medal[] = [];
   let clock = 0;
-  const zRail = zFront + RAIL.standoff + RAIL.size + 0.05;
 
   function hang(slot: number, settled = false) {
     const railIdx = slot < PER_RAIL ? 0 : 1;
-    const railY = RAIL.ys[railIdx] + RAIL.size / 2;
+    const railY = RAIL.rails[railIdx].y + RAIL.size / 2;
     const group = new THREE.Group();
     const ribbonMat = ribbons[slot % ribbons.length];
     const left = new THREE.Mesh(strip, ribbonMat);
@@ -81,7 +83,7 @@ export const createMedalHanger: ModelFactory = (ctx) => {
     disc.position.y = rim.position.y = -4.9;
     for (const m of [left, right, disc, rim]) m.castShadow = true;
     group.add(left, right, disc, rim);
-    group.position.set(slotsX[slot % PER_RAIL] + (railIdx ? 0.35 : 0), railY, zRail + railIdx * 0.2);
+    group.position.set(slotsX[slot % PER_RAIL] + (railIdx ? 0.35 : 0), railY, medalZ(railIdx));
     root.add(group);
     medals.push({ group, slot, born: settled ? -100 : clock, railY });
   }

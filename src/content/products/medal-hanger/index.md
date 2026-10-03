@@ -13,7 +13,6 @@ gallery:
   - { src: ./g-shoot-2.jpg, alt: "Ribbons hanging from the teak rails, side view." }
   - { src: ./g-corner.jpg, alt: "A hanger loaded with medals in a quiet corner." }
   - { src: ./g-shoot-3.jpg, alt: "An empty hanger with its brass hooks, low light." }
-  - { src: ./g-stack-dark.jpg, alt: "Finished hangers stacked in the workshop." }
 specs:
   - { label: Wood, value: "Solid teak (Shegun)" }
   - { label: Board, value: "14 × 6 in" }
