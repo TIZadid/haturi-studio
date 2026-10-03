@@ -7,6 +7,7 @@ import SpecSheet from '../../components/SpecSheet.astro';
 import Sketch from '../../components/Sketch.astro';
 import Gallery from '../../components/Gallery.astro';
 import NextProduct from '../../components/NextProduct.astro';
+import StickyDm from '../../components/StickyDm.astro';
 import { getProducts } from '../../lib/products';
 import { neighbours } from '../../lib/catalog';
 
@@ -28,4 +29,5 @@ const next = neighbours(all, id)!.next;
     {data.gallery.length > 0 && <Gallery images={data.gallery} />}
     {next.id !== id && <NextProduct product={next} />}
   </main>
+  <StickyDm name={data.name} />
 </Base>

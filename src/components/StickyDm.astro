@@ -1,0 +1,61 @@
+---
+// Keeps the order options on screen on product pages once the hero's DM buttons scroll away.
+import { fbDm, igDm } from '../config/site';
+interface Props { name: string }
+const { name } = Astro.props;
+---
+<div class="sdm" data-sticky-dm data-hidden>
+  <span class="sdm__name mono">{name}</span>
+  <div class="sdm__pair">
+    <a class="sdm__btn sdm__btn--solid mono" href={igDm()} target="_blank" rel="noopener noreferrer" data-dm="instagram">Instagram →</a>
+    <a class="sdm__btn mono" href={fbDm()} target="_blank" rel="noopener noreferrer" data-dm="messenger">Messenger →</a>
+  </div>
+</div>
+<style>
+  .sdm {
+    position: fixed; z-index: 45; left: var(--space-3); right: var(--space-3); bottom: calc(var(--space-3) + env(safe-area-inset-bottom));
+    display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+    background: var(--color-dark); color: var(--color-cream); border-radius: var(--radius-button);
+    transition: transform 0.45s var(--ease-out), opacity 0.3s;
+  }
+  .sdm[data-hidden] { transform: translateY(calc(100% + var(--space-6))); opacity: 0; pointer-events: none; }
+  .sdm__name { color: var(--color-on-dark-mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .sdm__pair { display: flex; gap: var(--space-2); flex-shrink: 0; }
+  .sdm__btn { padding: var(--space-3) var(--space-3); border-radius: var(--radius-button); border: 1px solid var(--color-cream); color: var(--color-cream); font-size: 11px; }
+  .sdm__btn--solid { background: var(--color-cream); color: var(--color-dark); }
+  .sdm__btn:hover { color: var(--color-cream); background: transparent; }
+  .sdm__btn--solid:hover { color: var(--color-dark); background: var(--color-accent-2-200); }
+  @media (max-width: 479px) {
+    .sdm { padding: var(--space-2); }
+    .sdm__name { display: none; }
+    .sdm__pair { flex: 1; }
+    .sdm__btn { flex: 1; text-align: center; padding-block: var(--space-4); }
+  }
+  @media (min-width: 900px) {
+    .sdm { left: auto; right: var(--gutter); bottom: var(--space-6); gap: var(--space-6); }
+    .sdm__btn { padding: var(--space-3) var(--space-4); }
+  }
+</style>
+<script>
+  import { onPage } from '../scripts/motion/lifecycle';
+  onPage(() => {
+    const bar = document.querySelector<HTMLElement>('[data-sticky-dm]');
+    const heroDm = document.querySelector('.phero .dm');
+    const footer = document.querySelector('footer');
+    if (!bar || !heroDm || !footer) return;
+    let heroGone = false, atFooter = false;
+    const sync = () => bar.toggleAttribute('data-hidden', !heroGone || atFooter);
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        // only once the hero buttons have scrolled up and away, not while they are still below
+        if (e.target === heroDm) heroGone = !e.isIntersecting && e.boundingClientRect.top < 0;
+        if (e.target === footer) atFooter = e.isIntersecting;
+      }
+      sync();
+    });
+    io.observe(heroDm);
+    io.observe(footer);
+    return () => { io.disconnect(); bar.setAttribute('data-hidden', ''); };
+  });
+</script>

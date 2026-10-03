@@ -17,7 +17,7 @@ Voice: calm, honest, dry. Short lines. No exclamation marks, no hype, no urgency
 
 - **Static site**: Astro 5, TypeScript, GSAP + ScrollTrigger, Lenis, Three.js (lazy-loaded procedural 3D models), Astro view transitions. Fonts self-hosted via Fontsource.
 - **Hosting**: Cloudflare Worker serving `dist/` as static assets (`wrangler.jsonc`), free tier. See `DEPLOY.md`.
-- **Ordering**: Instagram DM only (`ig.me/m/haturistudio`). No cart, no checkout, **no prices on the site**.
+- **Ordering**: Instagram (`ig.me/m/haturistudio`) and Messenger (`m.me/haturistudio`) DMs. No cart, no checkout, **no prices on the site**.
 - **Products**: one folder per product in `src/content/products/<slug>/`. See `PRODUCTS.md`.
 - **Later, not now**: a Django backend for orders/payments (cart, bKash, Steadfast) may come as a separate app. Don't build toward it in this repo.
 

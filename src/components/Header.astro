@@ -52,7 +52,12 @@ const products = await getProducts();
     padding-inline: var(--gutter);
     color: var(--color-ink-head);
     transition: transform 0.5s var(--ease-out), color 0.3s;
+    /* owner request: a soft halo in the ground colour keeps the header readable over any photo or headline */
+    --glow: var(--color-cream);
+    text-shadow: 0 0 2px var(--glow), 0 0 8px var(--glow), 0 0 16px var(--glow);
   }
+  .header[data-on-dark] { --glow: var(--color-dark); }
+  .mark, .sheet__btn, .header :global(.menu__btn) { filter: drop-shadow(0 0 6px var(--glow)); }
   .header[data-hidden]:not(:has(details[open])) { transform: translateY(-100%); }
   .brand { display: flex; align-items: center; gap: var(--space-3); color: inherit; }
   .mark { height: 28px; width: auto; }
@@ -96,14 +101,15 @@ const products = await getProducts();
   @media (max-width: 420px) { .brand__name { display: none; } }
 </style>
 <script>
-  // close any open header menu when tapping outside it, or after following one of its links
+  // close any open header menu when tapping outside it, or after choosing one of its links.
+  // capture phase, so it runs even when the smooth-scroll handler stops a same-page link's click.
   document.addEventListener('click', (e) => {
     document.querySelectorAll<HTMLDetailsElement>('[data-close-outside][open]').forEach((d) => {
       const inside = d.contains(e.target as Node);
       const onLink = (e.target as Element).closest('a');
       if (!inside || onLink) d.open = false;
     });
-  });
+  }, { capture: true });
   document.addEventListener('astro:before-swap', () => {
     document.querySelectorAll<HTMLDetailsElement>('[data-close-outside][open]').forEach((d) => (d.open = false));
   });
