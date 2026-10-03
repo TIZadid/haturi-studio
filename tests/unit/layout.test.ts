@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { easeOutBounce, fitDistance, gridSlots, nearestIndex, nextFree, railSlots, swingAngle } from '../../src/scripts/three/layout';
+import { easeOutBounce, fitDistance, gridSlots, nearestIndex, nextFree, pegPositions, railSlots, swingAngle } from '../../src/scripts/three/layout';
 
 describe('railSlots', () => {
   it('spreads evenly inside the inset', () => {
@@ -48,5 +48,19 @@ describe('fitDistance', () => {
   it('fits height on wide viewports', () => {
     const d = fitDistance(10, 10, 30, 4, 1);
     expect(d).toBeCloseTo(5 / Math.tan((15 * Math.PI) / 180));
+  });
+});
+
+describe('pegPositions', () => {
+  const o = { width: 23, height: 23, rows: 4, cols: 4, frame: 0.75, pegHeight: 2.2 };
+  const pegs = pegPositions(o);
+  it('puts a peg at every column line on every shelf and both inner frame edges', () => {
+    expect(pegs).toHaveLength((o.rows + 1) * (o.cols - 1));
+  });
+  it('keeps every peg inside the frame', () => {
+    for (const p of pegs) {
+      expect(p.y + o.pegHeight / 2).toBeLessThanOrEqual(o.height / 2 - o.frame + 1e-9);
+      expect(p.y - o.pegHeight / 2).toBeGreaterThanOrEqual(-o.height / 2 + o.frame - 1e-9);
+    }
   });
 });

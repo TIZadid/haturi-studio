@@ -18,7 +18,9 @@ const hint = kind === 'medal-hanger' ? 'Drag to turn / Tap to hang a medal' : 'D
 </figure>
 <style>
   .viewer { position: relative; display: grid; gap: var(--space-3); }
-  .viewer :global(.viewer__fallback), .viewer__stage { grid-area: 1 / 1; aspect-ratio: 4 / 5; width: 100%; }
+  /* square on phones so the model fills the frame; 4:5 portrait from tablets up */
+  .viewer :global(.viewer__fallback), .viewer__stage { grid-area: 1 / 1; aspect-ratio: 1 / 1; width: 100%; }
+  @media (min-width: 900px) { .viewer :global(.viewer__fallback), .viewer__stage { aspect-ratio: 4 / 5; } }
   .viewer :global(.viewer__fallback img) { width: 100%; height: 100%; object-fit: cover; }
   .viewer__meta { grid-area: 2 / 1; }
   .viewer__stage { position: relative; opacity: 0; transition: opacity 0.8s var(--ease-out); }

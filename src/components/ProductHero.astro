@@ -8,11 +8,11 @@ const { data, id } = Astro.props.product;
 ---
 <section class="phero" data-ground="cream">
   <div class="wrap phero__grid">
-    <div class="phero__rail mono label"><span>{data.code}</span><span>{bracket(data.audience)}</span><span>{data.released}</span></div>
-    <div class="phero__copy">
+    <div class="phero__rail mono label"><span>{data.code}</span><span>{bracket(data.audience)}</span><span>Handmade in Dhaka</span></div>
+    <div class="phero__copy fit">
       <h1 class="wordmark">{data.wordmark}</h1>
-      <p class="mono label">{data.name}</p>
       <p class="lede">{data.tagline}</p>
+      {data.note && <p class="phero__note mono">{data.note}</p>}
       <DmButton />
     </div>
     <ModelViewer kind={data.model} image={data.hero} alt={data.heroAlt} id={id} />
@@ -23,6 +23,8 @@ const { data, id } = Astro.props.product;
   .phero { padding-block: calc(var(--header-h) + var(--space-8)) var(--space-12); }
   .phero__grid { display: grid; gap: var(--space-8); }
   .phero__rail { display: flex; justify-content: space-between; gap: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--hairline); }
+  .phero__note { padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); border: 1px solid var(--card-border); color: var(--color-ink-head); }
+  .phero__copy h1 { font-size: min(var(--text-wordmark), 23cqi); }
   .phero__copy { display: grid; gap: var(--space-6); align-content: end; justify-items: start; }
   @media (min-width: 900px) {
     .phero__grid { grid-template-columns: 7fr 4fr; grid-template-areas: 'rail rail' 'copy viewer' 'rule rule'; column-gap: var(--space-12); }

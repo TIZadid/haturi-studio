@@ -6,7 +6,7 @@ import { PRODUCT_GLOB, productSchema } from '../../src/lib/product-schema';
 const schema = productSchema(() => z.string());
 const minimal = {
   name: 'Medal Hanger', code: 'HTR—MH', wordmark: 'Hanger.', order: 1,
-  audience: 'For runners', tagline: 'Fourteen medals. One wall.', released: '2026.AUG',
+  audience: 'For runners', tagline: 'Sixteen medals. One wall.',
   hero: './hero.jpg', heroAlt: 'A hanger on a wall', specs: [{ label: 'Wood', value: 'Teak' }],
 };
 
@@ -16,7 +16,6 @@ describe('productSchema', () => {
     expect(p.gallery).toEqual([]);
     expect(p.callouts).toEqual([]);
     expect(p.status).toBe('available');
-    expect(p.reel).toBeUndefined();
     expect(p.model).toBeUndefined();
   });
   it('rejects a code without the em dash pattern', () => {
@@ -25,8 +24,8 @@ describe('productSchema', () => {
   it('requires the wordmark full stop', () => {
     expect(() => schema.parse({ ...minimal, wordmark: 'Hanger' })).toThrow();
   });
-  it('requires a dot-date', () => {
-    expect(() => schema.parse({ ...minimal, released: 'Aug 2026' })).toThrow();
+  it('accepts an optional note', () => {
+    expect(schema.parse({ ...minimal, note: 'Customisable' }).note).toBe('Customisable');
   });
   it('requires at least one spec', () => {
     expect(() => schema.parse({ ...minimal, specs: [] })).toThrow();
@@ -36,9 +35,6 @@ describe('productSchema', () => {
   });
   it('rejects unknown models', () => {
     expect(() => schema.parse({ ...minimal, model: 'chair' })).toThrow();
-  });
-  it('accepts a reel with mp4 file', () => {
-    expect(schema.parse({ ...minimal, reel: { file: 'reel.mp4', poster: './reel-poster.jpg' } }).reel?.file).toBe('reel.mp4');
   });
   it('accepts an optional sketch with labels', () => {
     const p = schema.parse({ ...minimal, sketch: { src: './sketch.png', caption: 'Drawn before it is cut', labels: [{ label: 'Teak / Shegun', x: 30, y: 80 }] } });

@@ -6,10 +6,9 @@ import Annotated from '../../components/Annotated.astro';
 import SpecSheet from '../../components/SpecSheet.astro';
 import Sketch from '../../components/Sketch.astro';
 import Gallery from '../../components/Gallery.astro';
-import Reel from '../../components/Reel.astro';
 import NextProduct from '../../components/NextProduct.astro';
-import { getProducts, videoMap } from '../../lib/products';
-import { mediaUrl, neighbours } from '../../lib/catalog';
+import { getProducts } from '../../lib/products';
+import { neighbours } from '../../lib/catalog';
 
 export async function getStaticPaths() {
   const products = await getProducts();
@@ -19,7 +18,6 @@ const { product, all } = Astro.props;
 const { data, id } = product;
 const { Content } = await render(product);
 const next = neighbours(all, id)!.next;
-const reelSrc = data.reel ? mediaUrl(videoMap, id, data.reel.file) : undefined;
 ---
 <Base title={data.name} description={data.tagline} image={data.hero}>
   <main>
@@ -28,7 +26,6 @@ const reelSrc = data.reel ? mediaUrl(videoMap, id, data.reel.file) : undefined;
     {data.sketch && <Sketch src={data.sketch.src} caption={data.sketch.caption} labels={data.sketch.labels} code={data.code} alt={`Pencil line drawing of the ${data.name}.`} />}
     <SpecSheet product={product}><Content /></SpecSheet>
     {data.gallery.length > 0 && <Gallery images={data.gallery} />}
-    {reelSrc && data.reel && <Reel src={reelSrc} poster={data.reel.poster} code={data.code} />}
     {next.id !== id && <NextProduct product={next} />}
   </main>
 </Base>

@@ -4,10 +4,12 @@ Read this before making changes. Brand law lives in `../website-handoff/README.m
 
 ## The business
 
-Haturi Studio is a small Dhaka-based maker of minimal wooden display pieces, made one at a time. "Haturi" means hammer.
+Haturi Studio is a small Dhaka-based maker of minimal pieces, made one at a time. It started with wood (teak) and will add other materials: metal mirrors, lamps and more. Keep studio-level copy material-neutral; material claims belong on each product page. "Haturi" means hammer.
 
-- **Medal Hanger** `HTR—MH` — for runners. Solid teak, 14 × 6 in board, two 12 in rails, holds 14+ medals.
-- **Grid Shelf** `HTR—GS` — for collectors. Shill Karai, 23 × 23 in, 4 × 4 grid, 16 cups. (Older posts and reels call it "Cup Shelf"; the site uses Grid Shelf.)
+- **Medal Hanger** `HTR—MH` — for runners. Solid teak (Shegun), 14 × 6 in board, two 12 in rails, holds 16+ medals.
+- **Grid Shelf** `HTR—GS` — for collectors. Solid teak (Shegun), 23 × 23 in, 4 × 4 grid, 16 cups, customisable (the only piece where we say so publicly). Older posts call it "Cup Shelf".
+
+The current wooden pieces are solid teak (Shegun). Never mention Shill Karai. No dates on the site.
 
 Voice: calm, honest, dry. Short lines. No exclamation marks, no hype, no urgency.
 

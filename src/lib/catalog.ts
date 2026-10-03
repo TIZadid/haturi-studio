@@ -10,11 +10,3 @@ export function neighbours<T extends { id: string }>(list: readonly T[], id: str
   const n = list.length;
   return { prev: list[(i - 1 + n) % n], next: list[(i + 1) % n] };
 }
-
-export function mediaUrl(map: Record<string, string>, id: string, file?: string): string | undefined {
-  if (!file) return undefined;
-  const key = `/src/content/products/${id}/${file}`;
-  const url = map[key];
-  if (!url) throw new Error(`Product "${id}" lists ${file}, but ${key} does not exist`);
-  return url;
-}

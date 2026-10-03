@@ -5,7 +5,6 @@ wordmark: Test.
 order: 99
 audience: For testing
 tagline: Only the required fields.
-released: 2026.OCT
 hero: ./hero.jpg
 heroAlt: A test photo.
 specs:

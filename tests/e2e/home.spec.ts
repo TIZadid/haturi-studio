@@ -4,7 +4,7 @@ test.describe('home', () => {
   test('sections appear in the handoff order', async ({ page }) => {
     await page.goto('/');
     const ids = await page.locator('main section[id]').evaluateAll((s) => s.map((n) => n.id));
-    expect(ids).toEqual(['top', 'problem', 'products', 'craft', 'order']);
+    expect(ids).toEqual(['top', 'products', 'bento', 'problem', 'craft', 'order']);
   });
 
   test('one product row per product folder, linking to its page', async ({ page }) => {

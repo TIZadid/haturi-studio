@@ -3,7 +3,7 @@ import { igProfile, site } from '../config/site';
 const year = new Date().getFullYear();
 ---
 <footer class="footer" data-ground="dark">
-  <div class="wrap">
+  <div class="wrap fit">
     <p class="wordmark footer__word" data-reveal>Haturi Studio.</p>
     <hr class="rule" data-reveal="rule" />
     <div class="rails mono">
@@ -15,6 +15,6 @@ const year = new Date().getFullYear();
 </footer>
 <style>
   .footer { padding-block: var(--space-8) var(--space-8); }
-  .footer__word { color: var(--color-cream); margin-bottom: var(--space-8); font-size: clamp(56px, 10.5vw, 176px); }
+  .footer__word { color: var(--color-cream); margin-bottom: var(--space-8); font-size: min(176px, 13.5cqi); }
   .rails { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-4); padding-top: var(--space-6); }
 </style>

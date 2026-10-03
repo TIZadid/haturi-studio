@@ -10,7 +10,8 @@ test.describe('owner review fixes', () => {
     }
   });
 
-  test('header DM menu reveals both channels', async ({ page }) => {
+  test('header DM menu reveals both channels', async ({ page, isMobile }) => {
+    test.skip(isMobile, 'phones get the DM links inside the Menu sheet');
     await page.goto('/');
     await page.locator('header [data-dm-menu] summary').click();
     await expect(page.locator('header a[data-dm="instagram"]')).toBeVisible();

@@ -1,5 +1,5 @@
 import type * as T from 'three';
-import { easeOutBounce, gridSlots, nextFree } from '../layout';
+import { easeOutBounce, gridSlots, nextFree, pegPositions } from '../layout';
 import { tokenColor } from '../tokens';
 import { makeWood } from '../wood';
 import type { ModelFactory } from './types';
@@ -29,13 +29,12 @@ export const createGridShelf: ModelFactory = (ctx) => {
   box(F, H, D, W / 2 - F / 2, 0, 0);                   // right side
   box(W, F, D, 0, H / 2 - F / 2, 0);                   // top
   box(W, F, D, 0, -H / 2 + F / 2, 0);                  // bottom
-  const rowH = (H - 2 * F) / ROWS, colW = (W - 2 * F) / COLS;
+  const rowH = (H - 2 * F) / ROWS;
   const shelfYs = Array.from({ length: ROWS - 1 }, (_, i) => H / 2 - F - rowH * (i + 1));
   shelfYs.forEach((y) => box(W - 2 * F, SHELF, D, 0, y, 0));
   // the signature cross-lap pegs at each column line, front edge
-  const pegXs = Array.from({ length: COLS - 1 }, (_, i) => -W / 2 + F + colW * (i + 1));
-  const pegYs = [H / 2 - F, ...shelfYs, -H / 2 + F];
-  for (const y of pegYs) for (const x of pegXs) box(0.6, 2.2, 0.6, x, y, D / 2 - 0.3);
+  const PEG = 2.2;
+  for (const p of pegPositions({ width: W, height: H, rows: ROWS, cols: COLS, frame: F, pegHeight: PEG })) box(0.6, PEG, 0.6, p.x, p.y, D / 2 - 0.3);
 
   // cups: lathe body + torus handle, glazes from tokens
   const profile = [[0, 0], [1.25, 0], [1.4, 0.2], [1.45, 2.6], [1.38, 2.7]].map(([x, y]) => new THREE.Vector2(x, y));

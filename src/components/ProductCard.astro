@@ -8,8 +8,8 @@ const { data, id } = product;
 const flip = index % 2 === 1;
 ---
 <a href={`/products/${id}`} class:list={['card', { 'card--flip': flip }]} data-product data-cursor="VIEW">
-  <div class="card__rail mono label"><span>{pad2(index + 1)} / {data.code}</span><span>{bracket(data.audience)}</span><span>{data.released}</span></div>
-  <p class="wordmark card__word" data-reveal>{data.wordmark}</p>
+  <div class="card__rail mono label"><span>{pad2(index + 1)} / {data.code}</span><span>{bracket(data.audience)}</span></div>
+  <div class="card__word fit"><p class="wordmark" data-reveal>{data.wordmark}</p></div>
   <div class="card__media" data-tilt>
     <div class="card__img" transition:name={`product-${id}`}>
       <Picture src={data.hero} alt={data.heroAlt} widths={[480, 960, 1440]} sizes="(min-width: 900px) 40vw, 92vw" formats={['avif', 'webp']} />
@@ -18,6 +18,7 @@ const flip = index % 2 === 1;
   </div>
   <div class="card__copy">
     <p class="lede">{data.tagline}</p>
+    {data.note && <p class="card__note mono">{data.note}</p>}
     <ul class="card__specs mono label" role="list">{data.specs.slice(0, 3).map((s) => <li>{s.label} / {s.value}</li>)}</ul>
   </div>
   <hr class="rule card__rule" data-reveal="rule" />
@@ -26,12 +27,13 @@ const flip = index % 2 === 1;
   .card { display: grid; gap: var(--space-6); color: var(--color-text); padding-block: var(--space-12); }
   .card:hover { color: var(--color-text); }
   .card__rail { display: flex; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
-  .card__word { font-size: clamp(60px, 10vw, 168px); transition: letter-spacing 0.6s var(--ease-out); }
-  .card:hover .card__word { letter-spacing: -0.02em; }
+  .card__word .wordmark { font-size: min(clamp(60px, 10vw, 168px), 23cqi); transition: letter-spacing 0.6s var(--ease-out); }
+  .card:hover .card__word .wordmark { letter-spacing: -0.035em; }
   .card__media { position: relative; }
   .card__img :global(img) { aspect-ratio: 4 / 5; object-fit: cover; width: 100%; }
   .card__tag { position: absolute; left: var(--space-4); bottom: var(--space-4); padding: var(--space-2) var(--space-3); background: var(--color-cream); color: var(--color-ink-head); transform: translateZ(40px); }
   .card__copy { display: grid; gap: var(--space-4); }
+  .card__note { justify-self: start; padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); border: 1px solid var(--card-border); color: var(--color-ink-head); }
   .card__specs { list-style: none; display: grid; gap: var(--space-1); }
   @media (min-width: 900px) {
     .card { grid-template-columns: 7fr 5fr; grid-template-areas: 'rail rail' 'word media' 'copy media' 'rule rule'; column-gap: var(--space-12); align-items: end; }

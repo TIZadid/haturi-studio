@@ -12,7 +12,7 @@ const steps = [
 ];
 ---
 <section id="craft" class="section" data-ground="cream" data-craft>
-  <div class="wrap craft">
+  <div class="wrap craft fit">
     <div class="craft__head">
       <p class="mono label" data-reveal>[The craft] / Notes from the workshop</p>
       <hr class="rule" data-reveal="rule" />
@@ -33,14 +33,14 @@ const steps = [
     </ol>
     <div class="craft__foot">
       <p class="mono label">One at a time / Dhaka</p>
-      <p class="lede">Solid teak for the hanger, Shill Karai for the shelf. Every piece is cut, joined and finished by hand. No two boards share a grain.</p>
+      <p class="lede">Every piece is cut, joined and finished by hand in Dhaka, one at a time. Nothing comes off a production line.</p>
     </div>
   </div>
 </section>
 <style>
   .craft { display: grid; gap: var(--space-12); }
   .craft__head { display: grid; gap: var(--space-6); }
-  .craft__title { font-size: clamp(52px, 9vw, 160px); }
+  .craft__title { font-size: min(160px, 12cqi); }
   .craft__steps { list-style: none; display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-8) var(--space-4); }
   .step { display: grid; gap: var(--space-2); align-content: start; }
   .step__media { overflow: clip; margin-bottom: var(--space-3); background: var(--color-dark); }

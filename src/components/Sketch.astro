@@ -28,7 +28,8 @@ const { src, caption, labels, code, alt } = Astro.props;
   </div>
 </section>
 <style>
-  .sketch { padding-block: calc(var(--header-h) + var(--space-8)) var(--space-16); min-height: 100svh; display: grid; align-items: center; }
+  .sketch { padding-block: var(--space-16); }
+  @media (min-width: 900px) { .sketch { padding-block: calc(var(--header-h) + var(--space-8)) var(--space-16); min-height: 100svh; display: grid; align-items: center; } }
   .sketch__inner { display: grid; gap: var(--space-8); }
   .sketch__head { display: grid; gap: var(--space-4); }
   .sketch__paper { position: relative; background: var(--color-bg); border: 1px solid var(--card-border); padding: var(--space-6); width: 100%; margin-inline: auto;

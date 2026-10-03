@@ -6,7 +6,7 @@ import type { ModelFactory } from './types';
 
 export const BOARD = { w: 14, h: 6, d: 0.75 };
 export const RAIL = { len: 12, size: 0.75, standoff: 0.75, ys: [1.4, -1.4] };
-const PER_RAIL = 7;
+const PER_RAIL = 8;
 const DROP = 0.55;
 
 export const createMedalHanger: ModelFactory = (ctx) => {
@@ -49,7 +49,7 @@ export const createMedalHanger: ModelFactory = (ctx) => {
   }
 
   // medals: metal discs on ribbons, colours from the brand ramps only
-  const slotsX = railSlots(RAIL.len, PER_RAIL, 0.9);
+  const slotsX = railSlots(RAIL.len, PER_RAIL, 0.8);
   const metals = ['--color-accent-2-400', '--color-neutral-300', '--color-accent-2-600'].map((n) =>
     track(new THREE.MeshStandardMaterial({ color: tokenColor(n), metalness: 0.85, roughness: 0.32 })));
   const ribbons = ['--color-accent-2-500', '--color-accent-700', '--color-neutral-700', '--color-accent-2-200', '--color-accent-2-700'].map((n) =>

@@ -5,8 +5,8 @@ wordmark: Grid Shelf.
 order: 2
 audience: For collectors
 tagline: Sixteen cups. Each one with its own place.
-released: 2026.AUG
 hero: ./hero.jpg
+cover: ./cover.jpg
 heroAlt: The Grid Shelf in dark wood, holding cups in warm light.
 gallery:
   - { src: ./g-counter-dark.jpg, alt: "The shelf on a coffee counter at night." }
@@ -15,16 +15,17 @@ gallery:
   - { src: ./g-floral.jpg, alt: "A floral mug between the cross-lap pegs." }
   - { src: ./g-green.jpg, alt: "The empty shelf against a green hedge." }
 specs:
-  - { label: Wood, value: "Shill Karai" }
+  - { label: Wood, value: "Solid teak (Shegun)" }
   - { label: Size, value: "23 × 23 in" }
   - { label: Grid, value: "4 × 4" }
   - { label: Holds, value: "16 cups" }
+  - { label: Options, value: "Customisable on request" }
   - { label: Made, value: "One at a time, Dhaka" }
 callouts:
-  - { label: Shill Karai frame, x: 72, y: 6, side: down }
+  - { label: "Teak (Shegun) frame", x: 72, y: 6, side: down }
   - { label: Cross-lap pegs, x: 13, y: 46, side: up }
   - { label: Sixteen slots, x: 42, y: 62, side: down }
-reel: { file: reel.mp4, poster: ./reel-poster.jpg }
+note: Customisable. Ask in your DM.
 model: grid-shelf
 ---
 

@@ -24,7 +24,7 @@ test('vertical swipe over the viewer scrolls the page', async ({ page, isMobile 
   expect(await page.evaluate(() => scrollY)).toBeGreaterThan(before + 100);
 });
 
-for (const [id, max] of [['medal-hanger', 14], ['grid-shelf', 16]] as const) {
+for (const [id, max] of [['medal-hanger', 16], ['grid-shelf', 16]] as const) {
   test(`${id}: taps add pieces up to ${max}, reset clears`, async ({ page }) => {
     await page.goto(`/products/${id}`);
     const viewer = page.locator(`[data-viewer="${id}"]`);

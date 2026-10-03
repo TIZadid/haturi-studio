@@ -45,12 +45,6 @@ test('first screen shows the wordmark and the product photo', async ({ page, isM
   }
 });
 
-test('silent reels do not offer a sound toggle', async ({ page }) => {
-  await page.goto('/products/medal-hanger');
-  await expect(page.locator('[data-reel]')).toHaveCount(1);
-  await expect(page.locator('[data-reel-sound]')).toHaveCount(0);
-});
-
 test('medal hanger page draws its sketch, labelled Teak / Shegun', async ({ page }) => {
   await page.goto('/products/medal-hanger');
   const sketch = page.locator('[data-sketch]');

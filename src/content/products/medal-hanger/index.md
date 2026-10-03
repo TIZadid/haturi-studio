@@ -4,9 +4,9 @@ code: HTR—MH
 wordmark: Medal Hanger.
 order: 1
 audience: For runners
-tagline: Fourteen medals. One wall. Nothing left in a drawer.
-released: 2026.AUG
+tagline: Sixteen medals and more. One wall. Nothing left in a drawer.
 hero: ./hero.jpg
+cover: ./cover.jpg
 heroAlt: A teak Medal Hanger on a blue wall, loaded with race medals.
 gallery:
   - { src: ./g-hatirjheel.jpg, alt: "The hanger on a white wall in afternoon light." }
@@ -18,7 +18,7 @@ specs:
   - { label: Wood, value: "Solid teak (Shegun)" }
   - { label: Board, value: "14 × 6 in" }
   - { label: Rails, value: "Two, 12 in each" }
-  - { label: Holds, value: "14+ medals" }
+  - { label: Holds, value: "16+ medals" }
   - { label: Hangs on, value: "Two brass hooks" }
   - { label: Made, value: "One at a time, Dhaka" }
 callouts:
@@ -33,7 +33,6 @@ sketch:
     - { label: "6 in", x: 97, y: 55, side: up }
     - { label: "Two 12 in rails", x: 72, y: 44, side: up }
     - { label: "Teak / Shegun", x: 30, y: 78, side: down }
-reel: { file: reel.mp4, poster: ./reel-poster.jpg }
 model: medal-hanger
 ---
 

@@ -53,7 +53,7 @@ const og = image ? await getImage({ src: image, width: 1200, format: 'jpg' }) : 
     <Cursor />
     <script>
       import { startLifecycle } from '../scripts/motion/lifecycle';
-      import { refreshScroll, startSmooth } from '../scripts/motion/smooth';
+      import { refreshScroll, scrollToHash, startHashLinks, startSmooth } from '../scripts/motion/smooth';
       import { startCursor } from '../scripts/motion/cursor';
       import '../scripts/motion/reveal';
       import '../scripts/motion/header';
@@ -65,8 +65,9 @@ const og = image ? await getImage({ src: image, width: 1200, format: 'jpg' }) : 
         if (r?.name === 'InvalidStateError' && /Transition was aborted/.test(r.message ?? '')) e.preventDefault();
       });
       startSmooth();
+      startHashLinks();
       startCursor();
-      startLifecycle(() => requestAnimationFrame(refreshScroll));
+      startLifecycle(() => requestAnimationFrame(() => { refreshScroll(); scrollToHash(); }));
     </script>
   </body>
 </html>

@@ -3,19 +3,47 @@ import { Image } from 'astro:assets';
 import markDark from '../assets/brand/mark-dark.png';
 import markCream from '../assets/brand/mark-cream.png';
 import DmMenu from './DmMenu.astro';
+import { getProducts } from '../lib/products';
+import { fbDm, igDm } from '../config/site';
+const products = await getProducts();
 ---
 <header class="header" data-header>
   <a href="/" class="brand" data-cursor="HOME" aria-label="Haturi Studio, home">
     <Image src={markDark} alt="" width={28} class="mark mark--dark" />
     <Image src={markCream} alt="" width={28} class="mark mark--cream" />
-    <span class="mono">Haturi Studio</span>
+    <span class="mono brand__name">Haturi Studio</span>
   </a>
+
   <nav class="nav mono" aria-label="Sections">
-    <a href="/#products">[Products]</a>
+    <details class="drop" data-menu-products data-close-outside>
+      <summary>[Products] <span aria-hidden="true">↓</span></summary>
+      <div class="drop__list">
+        {products.map((p) => <a href={`/products/${p.id}`}><span>{p.data.name}</span><span class="label">{p.data.code}</span></a>)}
+        <a href="/#products"><span>All pieces</span><span aria-hidden="true">→</span></a>
+      </div>
+    </details>
     <a href="/#craft">[Craft]</a>
     <a href="/#order">[Order]</a>
   </nav>
-  <DmMenu />
+  <div class="header__dm"><DmMenu /></div>
+
+  <details class="sheet" data-menu-mobile data-close-outside>
+    <summary class="mono sheet__btn">Menu</summary>
+    <div class="sheet__panel" data-ground="cream">
+      <p class="mono label">[Products]</p>
+      {products.map((p) => <a class="sheet__product" href={`/products/${p.id}`}><span class="sheet__name">{p.data.name}</span><span class="mono label">{p.data.code}</span></a>)}
+      <hr class="rule" />
+      <a class="mono sheet__link" href="/#products">All pieces →</a>
+      <a class="mono sheet__link" href="/#craft">The craft →</a>
+      <a class="mono sheet__link" href="/#order">How to order →</a>
+      <hr class="rule" />
+      <p class="mono label">DM to order</p>
+      <div class="sheet__dm">
+        <a class="mono" href={igDm()} target="_blank" rel="noopener noreferrer">Instagram →</a>
+        <a class="mono" href={fbDm()} target="_blank" rel="noopener noreferrer">Messenger →</a>
+      </div>
+    </div>
+  </details>
 </header>
 <style>
   .header {
@@ -25,14 +53,58 @@ import DmMenu from './DmMenu.astro';
     color: var(--color-ink-head);
     transition: transform 0.5s var(--ease-out), color 0.3s;
   }
-  .header[data-hidden] { transform: translateY(-100%); }
+  .header[data-hidden]:not(:has(details[open])) { transform: translateY(-100%); }
   .brand { display: flex; align-items: center; gap: var(--space-3); color: inherit; }
   .mark { height: 28px; width: auto; }
   .mark--cream, .header[data-on-dark] .mark--dark { display: none; }
   .header[data-on-dark] .mark--cream { display: block; }
   .header[data-on-dark] { color: var(--color-cream); }
-  .header[data-on-dark] a { color: var(--color-cream); }
-  .nav { display: flex; gap: var(--space-6); }
-  .nav a { color: inherit; }
-  @media (max-width: 640px) { .nav { display: none; } .brand .mono { display: none; } }
+  .header[data-on-dark] .nav > a, .header[data-on-dark] summary { color: var(--color-cream); }
+  .nav { display: none; gap: var(--space-6); align-items: center; }
+  .nav > a { color: inherit; }
+  summary { list-style: none; cursor: pointer; color: inherit; }
+  summary::-webkit-details-marker { display: none; }
+  .drop { position: relative; }
+  .drop summary span { display: inline-block; transition: transform 0.25s var(--ease-out); }
+  .drop[open] summary span { transform: rotate(180deg); }
+  .drop__list {
+    position: absolute; left: 0; top: calc(100% + var(--space-3)); min-width: 260px;
+    display: grid; background: var(--color-cream); border: 1px solid var(--card-border);
+  }
+  .drop__list a { display: flex; justify-content: space-between; gap: var(--space-6); padding: var(--space-3) var(--space-4); color: var(--color-ink-head); }
+  .drop__list a + a { border-top: 1px solid var(--hairline); }
+  .drop__list a:hover { background: var(--color-bg); }
+  .header__dm { display: none; }
+
+  .sheet__btn { padding: var(--space-2) var(--space-4); border: 1px solid currentColor; border-radius: var(--radius-button); min-height: 40px; display: grid; place-items: center; }
+  .sheet__panel {
+    position: fixed; inset: var(--header-h) 0 0 0; overflow-y: auto;
+    display: grid; align-content: start; gap: var(--space-3); padding: var(--space-6) var(--gutter) var(--space-12);
+    color: var(--color-ink-head);
+  }
+  .sheet__product { display: flex; justify-content: space-between; align-items: baseline; padding-block: var(--space-2); color: var(--color-ink-head); }
+  .sheet__name { font-family: var(--font-heading); font-weight: 800; font-size: 36px; letter-spacing: -0.03em; line-height: 1; }
+  .sheet__link { padding-block: var(--space-3); color: var(--color-ink-head); font-size: var(--text-mono-lg); }
+  .sheet__dm { display: flex; gap: var(--space-3); }
+  .sheet__dm a { flex: 1; text-align: center; padding: var(--space-4); border: 1px solid var(--color-ink-head); border-radius: var(--radius-button); color: var(--color-ink-head); }
+  .sheet__dm a:first-child { background: var(--color-ink-head); color: var(--color-cream); }
+
+  @media (min-width: 900px) {
+    .nav, .header__dm { display: flex; }
+    .sheet { display: none; }
+  }
+  @media (max-width: 420px) { .brand__name { display: none; } }
 </style>
+<script>
+  // close any open header menu when tapping outside it, or after following one of its links
+  document.addEventListener('click', (e) => {
+    document.querySelectorAll<HTMLDetailsElement>('[data-close-outside][open]').forEach((d) => {
+      const inside = d.contains(e.target as Node);
+      const onLink = (e.target as Element).closest('a');
+      if (!inside || onLink) d.open = false;
+    });
+  });
+  document.addEventListener('astro:before-swap', () => {
+    document.querySelectorAll<HTMLDetailsElement>('[data-close-outside][open]').forEach((d) => (d.open = false));
+  });
+</script>

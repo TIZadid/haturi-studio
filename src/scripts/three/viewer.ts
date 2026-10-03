@@ -70,6 +70,7 @@ export async function mountViewer(el: HTMLElement): Promise<() => void> {
 
   scene.add(m.root);
   const box = new THREE.Box3().setFromObject(m.root);
+  const centre = box.getCenter(new THREE.Vector3());
   wall.position.z = box.min.z - 0.01;
   scene.add(wall);
   updateCaption();
@@ -88,7 +89,9 @@ export async function mountViewer(el: HTMLElement): Promise<() => void> {
     if (!width || !height) return;
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
-    camera.position.set(0, 0, fitDistance(m.size.width, m.size.height, camera.fov, camera.aspect));
+    // look straight at the model's centre so nothing reads as tilted or raised
+    camera.position.set(centre.x, centre.y, centre.z + fitDistance(m.size.width, m.size.height, camera.fov, camera.aspect));
+    controls.target.copy(centre);
     camera.updateProjectionMatrix();
     controls.update();
   };

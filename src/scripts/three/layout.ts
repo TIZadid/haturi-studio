@@ -48,3 +48,15 @@ export function fitDistance(width: number, height: number, fovDeg: number, aspec
   const half = Math.tan(((fovDeg / 2) * Math.PI) / 180);
   return Math.max(height / 2 / half, width / 2 / (half * aspect)) * margin;
 }
+
+/** Cross-lap pegs at every inner column line: one on each shelf, and one tucked under the top and above the bottom frame. */
+export function pegPositions(o: { width: number; height: number; rows: number; cols: number; frame: number; pegHeight: number }) {
+  const rowH = (o.height - 2 * o.frame) / o.rows;
+  const colW = (o.width - 2 * o.frame) / o.cols;
+  const inner = o.height / 2 - o.frame;
+  const ys = [inner - o.pegHeight / 2];
+  for (let r = 1; r < o.rows; r++) ys.push(inner - rowH * r);
+  ys.push(-inner + o.pegHeight / 2);
+  const xs = Array.from({ length: o.cols - 1 }, (_, c) => -o.width / 2 + o.frame + colW * (c + 1));
+  return ys.flatMap((y) => xs.map((x) => ({ x, y })));
+}

@@ -4,7 +4,7 @@ interface Props { product: CollectionEntry<'products'> }
 const { data, id } = Astro.props.product;
 ---
 <section class="section" data-ground="white">
-  <a class="wrap next" href={`/products/${id}`} data-next data-cursor="NEXT">
+  <a class="wrap next fit" href={`/products/${id}`} data-next data-cursor="NEXT">
     <span class="mono label">[Next piece] / {data.code}</span>
     <span class="wordmark next__word">{data.wordmark}</span>
     <span class="mono label">{data.tagline} →</span>
@@ -12,6 +12,6 @@ const { data, id } = Astro.props.product;
 </section>
 <style>
   .next { display: grid; gap: var(--space-6); }
-  .next__word { transition: letter-spacing 0.7s var(--ease-out), color 0.3s; }
-  .next:hover .next__word { letter-spacing: 0.01em; }
+  .next__word { font-size: min(var(--text-wordmark), 22cqi); transition: letter-spacing 0.7s var(--ease-out), color 0.3s; }
+  .next:hover .next__word { letter-spacing: -0.03em; }
 </style>

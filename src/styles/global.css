@@ -44,9 +44,12 @@ a:hover { color: var(--color-ink-head); }
   font-weight: 800;
   font-size: var(--text-wordmark);
   letter-spacing: -0.05em;
-  line-height: 0.86;
+  line-height: 0.9;
+  padding-bottom: 0.1em; /* room for descenders (g, y) */
   color: var(--color-ink-head);
 }
+/* a wordmark sizes to its container when one is declared, so long names never overflow */
+.fit { container-type: inline-size; min-width: 0; }
 .lede { max-width: 36ch; }
 .section { padding-block: clamp(var(--space-16), 12vw, var(--space-32)); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }

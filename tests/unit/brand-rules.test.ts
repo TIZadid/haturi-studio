@@ -23,7 +23,11 @@ describe('brand rules (website-handoff/README.md "Never")', () => {
   it.each(globSync(['src/content/**/*.md']))('%s copy has no exclamation marks', (f) => {
     expect(read(f).replace(/^---[\s\S]*?---/, '')).not.toContain('!');
   });
-  it.each(copy)('%s does not advertise custom orders', (f) => {
+  // only the Grid Shelf may mention customisation, and only from its own content file
+  it.each(copy.filter((f) => !f.includes('content/products/grid-shelf/')))('%s does not advertise custom orders', (f) => {
     expect(read(f)).not.toMatch(/made to order|custom|bespoke|any size|your size|what you will put on it|size, wood/i);
+  });
+  it.each(copy)('%s does not mention Shill Karai', (f) => {
+    expect(read(f)).not.toMatch(/shill\s*karai/i);
   });
 });
