@@ -1,10 +1,14 @@
 ---
 import { igProfile, site } from '../config/site';
 const year = new Date().getFullYear();
+const word = 'Haturi Studio.';
 ---
 <footer class="footer" data-ground="dark">
   <div class="wrap fit">
-    <p class="wordmark footer__word" data-reveal>Haturi Studio.</p>
+    <a href="#top" class="totop" data-to-top data-cursor="TOP" aria-label="Haturi Studio. Back to top">
+      <span class="wordmark footer__word" data-reveal aria-hidden="true">{[...word].map((c, i) => <span class="ch" style={`--i:${i}`}>{c === ' ' ? ' ' : c}</span>)}</span>
+      <span class="totop__label mono" aria-hidden="true">Back to top ↑</span>
+    </a>
     <hr class="rule" data-reveal="rule" />
     <div class="rails mono">
       <a href={igProfile()} target="_blank" rel="noopener noreferrer" data-cursor="INSTAGRAM">@{site.instagram}</a>
@@ -15,6 +19,25 @@ const year = new Date().getFullYear();
 </footer>
 <style>
   .footer { padding-block: var(--space-8) var(--space-8); }
-  .footer__word { color: var(--color-cream); margin-bottom: var(--space-8); font-size: min(176px, 13.5cqi); }
+  .totop { display: grid; gap: var(--space-2); margin-bottom: var(--space-8); color: var(--color-cream); }
+  .footer__word { display: block; color: var(--color-cream); font-size: min(176px, 13.5cqi); }
+  .ch { display: inline-block; transition: transform 0.5s var(--ease-out), color 0.3s; transition-delay: calc(var(--i) * 25ms); }
+  .totop:hover .ch { transform: translateY(-0.12em); color: var(--color-accent-2-300); }
+  .totop__label { opacity: 0; transform: translateY(6px); transition: opacity 0.3s, transform 0.4s var(--ease-out); color: var(--color-on-dark-mono); }
+  .totop:hover .totop__label, .totop:focus-visible .totop__label { opacity: 1; transform: none; }
+  @media (hover: none) { .totop__label { opacity: 1; transform: none; } }
   .rails { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-4); padding-top: var(--space-6); }
 </style>
+<script>
+  import { getLenis } from '../scripts/motion/smooth';
+  // works on every page (product pages have no #top), and glides instead of jumping
+  document.addEventListener('click', (e) => {
+    const a = (e.target as Element).closest('[data-to-top]');
+    if (!a) return;
+    e.preventDefault();
+    e.stopPropagation();
+    const lenis = getLenis();
+    if (lenis) lenis.scrollTo(0, { duration: 1.4, force: true });
+    else scrollTo({ top: 0, behavior: 'smooth' });
+  }, { capture: true });
+</script>

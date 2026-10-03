@@ -21,7 +21,7 @@ const lines = ['Haturi', 'Studio'];
     ))}
   </div>
   <div class="hero__block" data-hero-block>
-    <Image src={mark} alt="" width={56} class="hero__mark" data-hero-mark />
+    <Image src={mark} alt="" width={56} class="hero__mark hammer" data-hero-mark />
     <h1 class="h-hero" aria-label="Haturi Studio">
       {lines.map((line) => (
         <span class="line" aria-hidden="true">{[...line].map((c) => <span class="char" data-hero-char>{c}</span>)}</span>
@@ -62,7 +62,7 @@ const lines = ['Haturi', 'Studio'];
     display: grid; place-content: center; justify-items: center; gap: var(--space-4);
     padding-inline: var(--gutter); text-align: center;
   }
-  .hero__mark { height: 52px; width: auto; }
+  .hero__mark { height: 52px; width: auto; pointer-events: auto; }
   h1 { display: grid; justify-items: center; color: var(--color-cream); text-transform: uppercase; }
   .line { display: block; overflow: hidden; padding-bottom: 0.06em; }
   .char { display: inline-block; }

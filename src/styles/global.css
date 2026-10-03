@@ -45,7 +45,9 @@ a:hover { color: var(--color-ink-head); }
   font-size: var(--text-wordmark);
   letter-spacing: -0.05em;
   line-height: 0.9;
-  padding-bottom: 0.1em; /* room for descenders (g, y) */
+  /* the g's tail stays inside the box even if something trims to it; the negative margin keeps spacing unchanged */
+  padding-bottom: 0.22em;
+  margin-bottom: -0.12em;
   color: var(--color-ink-head);
 }
 /* a wordmark sizes to its container when one is declared, so long names never overflow */
@@ -67,3 +69,14 @@ a:hover { color: var(--color-ink-head); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* the hammer mark strikes when hovered or tapped */
+@keyframes hammer-strike {
+  0% { rotate: 0deg; }
+  35% { rotate: -38deg; }
+  55% { rotate: 10deg; }
+  72% { rotate: -4deg; }
+  100% { rotate: 0deg; }
+}
+.hammer { transform-origin: 75% 85%; }
+.hammer-host:hover .hammer, .hammer-host:active .hammer, .hammer:hover, .hammer:active { animation: hammer-strike 0.7s var(--ease-out); }
