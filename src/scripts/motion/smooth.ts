@@ -5,11 +5,21 @@ import { reducedMotion } from './lifecycle';
 
 gsap.registerPlugin(ScrollTrigger);
 let lenis: Lenis | null = null;
+let forward = true;
 
 export function startSmooth() {
   if (lenis || reducedMotion()) return;
   lenis = new Lenis({ lerp: 0.16, wheelMultiplier: 1.1 });
   lenis.on('scroll', ScrollTrigger.update);
+  // a glide still running when you tap a link would carry on into the next page; stop it on every swap.
+  // forward links open at the top; back/forward keep the position the router restores.
+  document.addEventListener('astro:before-preparation', (e) => {
+    forward = (e as Event & { navigationType?: string }).navigationType !== 'traverse';
+  });
+  document.addEventListener('astro:after-swap', () => {
+    lenis?.stop(); lenis?.start();
+    if (forward && !location.hash) { lenis?.scrollTo(0, { immediate: true, force: true }); ScrollTrigger.clearScrollMemory(); scrollTo(0, 0); }
+  });
   gsap.ticker.add((t) => lenis?.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
 }
