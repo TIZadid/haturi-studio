@@ -21,7 +21,7 @@ const { images } = Astro.props;
 <style>
   .gallery { padding-block: var(--space-16); overflow: clip; }
   .gallery__head { display: flex; justify-content: space-between; padding-bottom: var(--space-6); }
-  .gallery__viewport { overflow-x: auto; scroll-snap-type: x mandatory; padding-inline: var(--gutter); }
+  .gallery__viewport { overflow-x: auto; scroll-snap-type: x mandatory; padding-inline: var(--gutter); scroll-padding-inline: var(--gutter); }
   .gallery[data-pinned] .gallery__viewport { overflow: visible; }
   .gallery__track { display: flex; gap: var(--space-6); width: max-content; }
   figure { display: grid; gap: var(--space-3); scroll-snap-align: start; }

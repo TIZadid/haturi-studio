@@ -12,7 +12,7 @@ const { image, alt, callouts, code } = Astro.props;
     <figure class="ann__figure">
       <Picture src={image} alt={alt} widths={[640, 1280, 1920]} sizes="(min-width: 900px) 70vw, 92vw" formats={['avif', 'webp']} />
       {callouts.map((c, i) => (
-        <span class:list={['callout', `callout--${c.side}`]} style={`left:${c.x}%;top:${c.y}%`} data-callout>
+        <span class:list={['callout', `callout--${c.side}`, c.x < 30 ? 'callout--start' : c.x > 70 ? 'callout--end' : '']} style={`left:${c.x}%;top:${c.y}%`} data-callout>
           <span class="callout__dot mono">{pad2(i + 1)}</span>
           <span class="callout__line" data-callout-line></span>
           <span class="callout__pill mono" data-callout-pill>{c.label}</span>
@@ -24,21 +24,25 @@ const { image, alt, callouts, code } = Astro.props;
 </section>
 <style>
   .ann { display: grid; gap: var(--space-6); }
-  .ann__figure { position: relative; max-width: 720px; margin-inline: auto; width: 100%; }
+  .ann__figure { position: relative; max-width: 720px; margin-inline: auto; width: 100%; padding-top: var(--space-12); }
   .ann__figure :global(img) { width: 100%; }
-  .callout { position: absolute; display: grid; justify-items: center; transform: translate(-50%, -50%); }
-  .callout__dot { width: 22px; height: 22px; border-radius: var(--radius-pill); background: var(--color-cream); color: var(--color-ink-head); display: grid; place-items: center; font-size: 9px; letter-spacing: 0; }
-  .callout__line, .callout__pill { display: none; }
-  .ann__list { list-style: none; display: grid; gap: var(--space-2); }
+  .callout { position: absolute; display: flex; flex-direction: column; align-items: center; transform: translate(-50%, 0); }
+  .callout--up { flex-direction: column-reverse; transform: translate(-50%, -100%); }
+  /* near an edge the pill hangs inward so it never leaves the photo */
+  .callout--start { align-items: flex-start; transform: translate(-5px, 0); }
+  .callout--start.callout--up { transform: translate(-5px, -100%); }
+  .callout--end { align-items: flex-end; transform: translate(calc(-100% + 5px), 0); }
+  .callout--end.callout--up { transform: translate(calc(-100% + 5px), -100%); }
+  .callout__dot { width: 10px; height: 10px; border-radius: var(--radius-pill); background: var(--color-cream); }
+  .callout__dot > :global(*), .callout__dot { font-size: 0; }
+  .callout__line { display: block; width: 1px; height: 36px; background: var(--color-cream); transform-origin: 50% 0; }
+  .callout--start .callout__line { margin-left: 4.5px; } .callout--end .callout__line { margin-right: 4.5px; }
+  .callout--up .callout__line { transform-origin: 50% 100%; }
+  .callout__pill { display: block; padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); border: 1px solid var(--card-border); background: var(--color-bg); color: var(--color-ink-head); white-space: nowrap; font-size: 10px; letter-spacing: 0.12em; }
+  .ann__list { display: none; }
   @media (min-width: 900px) {
-    .callout { transform: translate(-50%, 0); }
-    .callout--up { flex-direction: column-reverse; transform: translate(-50%, -100%); display: flex; align-items: center; }
-    .callout--down { display: flex; flex-direction: column; align-items: center; }
-    .callout__dot { width: 10px; height: 10px; font-size: 0; }
-    .callout__line { display: block; width: 1px; height: 72px; background: var(--color-cream); transform-origin: 50% 0; }
-    .callout--up .callout__line { transform-origin: 50% 100%; }
-    .callout__pill { display: block; padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill); border: 1px solid var(--card-border); background: var(--color-bg); color: var(--color-ink-head); white-space: nowrap; }
-    .ann__list { display: none; }
+    .callout__line { height: 72px; }
+    .callout__pill { padding: var(--space-2) var(--space-4); font-size: var(--text-mono); letter-spacing: var(--track-mono); }
   }
 </style>
 <script>
@@ -50,7 +54,7 @@ const { image, alt, callouts, code } = Astro.props;
     const root = document.querySelector('[data-annotated]');
     if (!root) return;
     const mm = gsap.matchMedia();
-    mm.add('(min-width: 900px) and (prefers-reduced-motion: no-preference)', () => {
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
       gsap.timeline({ scrollTrigger: { trigger: root, start: 'top 60%', once: true } })
         .from('[data-callout-line]', { scaleY: 0, duration: 0.8, ease: 'expo.out', stagger: 0.15 })
         .from('[data-callout-pill]', { autoAlpha: 0, y: 8, duration: 0.6, ease: 'expo.out', stagger: 0.15 }, '<0.3');

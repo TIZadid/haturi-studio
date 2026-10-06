@@ -25,11 +25,6 @@ test('product pages keep a DM option on screen while scrolling', async ({ page }
   expect(box.y + box.height).toBeLessThanOrEqual(page.viewportSize()!.height + 1);
 });
 
-test('header text has a halo in the ground colour so it reads over anything', async ({ page }) => {
-  await page.goto('/');
-  const shadow = await page.locator('header').evaluate((el) => getComputedStyle(el).textShadow);
-  expect(shadow).not.toBe('none');
-});
 
 test('the next-piece link opens the other product at the top', async ({ page, isMobile }) => {
   await page.goto('/products/medal-hanger');

@@ -45,9 +45,8 @@ a:hover { color: var(--color-ink-head); }
   font-size: var(--text-wordmark);
   letter-spacing: -0.05em;
   line-height: 0.9;
-  /* the g's tail stays inside the box even if something trims to it; the negative margin keeps spacing unchanged */
+  /* the g's tail stays inside the box: iOS Safari clips anything hanging out of a .fit container */
   padding-bottom: 0.22em;
-  margin-bottom: -0.12em;
   color: var(--color-ink-head);
 }
 /* a wordmark sizes to its container when one is declared, so long names never overflow */

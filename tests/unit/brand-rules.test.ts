@@ -15,9 +15,7 @@ describe('brand rules (website-handoff/README.md "Never")', () => {
   it.each(files)('%s has no gradients or CSS shadows', (f) => {
     const src = read(f);
     expect(src).not.toMatch(/gradient\(/);
-    expect(src).not.toMatch(/box-shadow\s*:\s*(?!none)/);
-    // owner exception: only the header may use a text halo, so it stays readable over photos
-    if (!f.endsWith('components/Header.astro')) expect(src).not.toMatch(/text-shadow\s*:\s*(?!none)/);
+    expect(src).not.toMatch(/(box|text)-shadow\s*:\s*(?!none)/);
   });
   it.each(copy)('%s has no emoji', (f) => {
     expect(read(f)).not.toMatch(/(?![©®™])\p{Extended_Pictographic}/u);

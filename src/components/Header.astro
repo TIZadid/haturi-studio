@@ -8,6 +8,7 @@ import { fbDm, igDm } from '../config/site';
 const products = await getProducts();
 ---
 <header class="header" data-header>
+  <div class="bar" data-header-bar aria-hidden="true"></div>
   <a href="/" class="brand hammer-host" data-cursor="HOME" aria-label="Haturi Studio, home">
     <Image src={markDark} alt="" width={28} class="mark mark--dark hammer" />
     <Image src={markCream} alt="" width={28} class="mark mark--cream hammer" />
@@ -28,7 +29,7 @@ const products = await getProducts();
   <div class="header__dm"><DmMenu /></div>
 
   <details class="sheet" data-menu-mobile data-close-outside>
-    <summary class="mono sheet__btn">Menu</summary>
+    <summary class="mono sheet__btn"><span class="burger" aria-hidden="true"><i></i><i></i></span><span class="sheet__label">Menu</span></summary>
     <div class="sheet__panel" data-ground="cream">
       <p class="mono label">[Products]</p>
       {products.map((p) => <a class="sheet__product" href={`/products/${p.id}`}><span class="sheet__name">{p.data.name}</span><span class="mono label">{p.data.code}</span></a>)}
@@ -52,14 +53,19 @@ const products = await getProducts();
     padding-inline: var(--gutter);
     color: var(--color-ink-head);
     transition: transform 0.5s var(--ease-out), color 0.3s;
-    /* owner request: a soft halo in the ground colour keeps the header readable over any photo or headline */
-    --glow: var(--color-cream);
-    text-shadow: 0 0 2px var(--glow), 0 0 8px var(--glow), 0 0 16px var(--glow);
   }
-  .header[data-on-dark] { --glow: var(--color-dark); }
-  .mark, .sheet__btn, .header :global(.menu__btn) { filter: drop-shadow(0 0 6px var(--glow)); }
+  /* a solid bar fades in once the page moves, so the header reads over any photo or headline */
+  .bar { position: absolute; inset: 0; z-index: -1; background: var(--bar-light); border-bottom: 1px solid var(--hairline); opacity: 0; transition: opacity 0.35s, background 0.3s; }
+  .header[data-scrolled] .bar, .header:has(details[open]) .bar { opacity: 1; }
+  .header[data-on-dark] .bar { background: var(--bar-dark); border-color: var(--hairline-dark); }
+  .header:has([data-menu-mobile][open]) .bar { background: var(--color-cream); border-color: var(--hairline); }
+  .header:has([data-menu-mobile][open]) { color: var(--color-ink-head); }
+  .header:has([data-menu-mobile][open]) .mark--dark { display: block; }
+  .header:has([data-menu-mobile][open]) .mark--cream { display: none; }
+  .header:has([data-menu-mobile][open]) summary { color: var(--color-ink-head); }
   .header[data-hidden]:not(:has(details[open])) { transform: translateY(-100%); }
   .brand { display: flex; align-items: center; gap: var(--space-3); color: inherit; }
+  .brand__name { font-size: 11px; }
   .mark { height: 28px; width: auto; }
   .mark--cream, .header[data-on-dark] .mark--dark { display: none; }
   .header[data-on-dark] .mark--cream { display: block; }
@@ -81,9 +87,14 @@ const products = await getProducts();
   .drop__list a:hover { background: var(--color-bg); }
   .header__dm { display: none; }
 
-  .sheet__btn { padding: var(--space-2) var(--space-4); border: 1px solid currentColor; border-radius: var(--radius-button); min-height: 40px; display: grid; place-items: center; }
+  .sheet__btn { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-1) var(--space-2) var(--space-3); min-height: 44px; }
+  .burger { position: relative; width: 22px; height: 10px; }
+  .burger i { position: absolute; left: 0; right: 0; height: 1.5px; background: currentColor; transition: transform 0.35s var(--ease-out), top 0.35s var(--ease-out); }
+  .burger i:first-child { top: 0; } .burger i:last-child { top: 8.5px; }
+  .sheet[open] .burger i:first-child { top: 4.25px; transform: rotate(45deg); }
+  .sheet[open] .burger i:last-child { top: 4.25px; transform: rotate(-45deg); }
   .sheet__panel {
-    position: fixed; inset: var(--header-h) 0 0 0; overflow-y: auto;
+    position: fixed; inset: var(--header-h) 0 0 0; overflow-y: auto; animation: sheet-in 0.35s var(--ease-out);
     display: grid; align-content: start; gap: var(--space-3); padding: var(--space-6) var(--gutter) var(--space-12);
     color: var(--color-ink-head);
   }
@@ -94,11 +105,11 @@ const products = await getProducts();
   .sheet__dm a { flex: 1; text-align: center; padding: var(--space-4); border: 1px solid var(--color-ink-head); border-radius: var(--radius-button); color: var(--color-ink-head); }
   .sheet__dm a:first-child { background: var(--color-ink-head); color: var(--color-cream); }
 
+  @keyframes sheet-in { from { opacity: 0; transform: translateY(-8px); } }
   @media (min-width: 900px) {
     .nav, .header__dm { display: flex; }
     .sheet { display: none; }
   }
-  @media (max-width: 420px) { .brand__name { display: none; } }
 </style>
 <script>
   // close any open header menu when tapping outside it, or after choosing one of its links.
