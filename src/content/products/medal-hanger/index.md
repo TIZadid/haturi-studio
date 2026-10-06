@@ -20,15 +20,16 @@ specs:
   - { label: Holds, value: "16+ medals" }
   - { label: Hangs on, value: "Two brass hooks" }
   - { label: Made, value: "One at a time, Dhaka" }
+closeup: ./closeup.jpg
 callouts:
-  - { label: Brass hooks, x: 37, y: 11, side: up }
-  - { label: Solid teak board, x: 68, y: 22, side: up }
-  - { label: Two 12 in rails, x: 45, y: 25, side: down }
+  - { label: "Brass hooks", x: 29, y: 12, side: down }
+  - { label: "Teak (Shegun) board", x: 82, y: 38, side: down }
+  - { label: "Two 12 in rails", x: 17, y: 55, side: down }
 sketch:
   src: ./sketch.png
   caption: "Drawn before it's cut"
   labels:
-    - { label: "14 in", x: 50, y: 21, side: up }
+    - { label: "14 in", x: 50, y: 27, side: up }
     - { label: "6 in", x: 97, y: 55, side: up }
     - { label: "Two 12 in rails", x: 72, y: 44, side: up }
     - { label: "Teak / Shegun", x: 30, y: 78, side: down }

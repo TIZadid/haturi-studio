@@ -23,7 +23,7 @@ const next = neighbours(all, id)!.next;
 <Base title={data.name} description={data.tagline} image={data.hero}>
   <main>
     <ProductHero product={product} />
-    {data.callouts.length > 0 && <Annotated image={data.hero} alt={data.heroAlt} callouts={data.callouts} code={data.code} />}
+    {data.callouts.length > 0 && <Annotated image={data.closeup ?? data.hero} alt={data.heroAlt} callouts={data.callouts} code={data.code} />}
     {data.sketch && <Sketch src={data.sketch.src} caption={data.sketch.caption} labels={data.sketch.labels} code={data.code} alt={`Pencil line drawing of the ${data.name}.`} />}
     <SpecSheet product={product}><Content /></SpecSheet>
     {data.gallery.length > 0 && <Gallery images={data.gallery} />}

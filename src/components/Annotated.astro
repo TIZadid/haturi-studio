@@ -24,7 +24,7 @@ const { image, alt, callouts, code } = Astro.props;
 </section>
 <style>
   .ann { display: grid; gap: var(--space-6); }
-  .ann__figure { position: relative; max-width: 720px; margin-inline: auto; width: 100%; padding-top: var(--space-12); }
+  .ann__figure { position: relative; max-width: 900px; margin-inline: auto; width: 100%; }
   .ann__figure :global(img) { width: 100%; }
   .callout { position: absolute; display: flex; flex-direction: column; align-items: center; transform: translate(-50%, 0); }
   .callout--up { flex-direction: column-reverse; transform: translate(-50%, -100%); }
@@ -35,13 +35,13 @@ const { image, alt, callouts, code } = Astro.props;
   .callout--end.callout--up { transform: translate(calc(-100% + 5px), -100%); }
   .callout__dot { width: 10px; height: 10px; border-radius: var(--radius-pill); background: var(--color-cream); }
   .callout__dot > :global(*), .callout__dot { font-size: 0; }
-  .callout__line { display: block; width: 1px; height: 36px; background: var(--color-cream); transform-origin: 50% 0; }
+  .callout__line { display: block; width: 1px; height: 20px; background: var(--color-cream); transform-origin: 50% 0; }
   .callout--start .callout__line { margin-left: 4.5px; } .callout--end .callout__line { margin-right: 4.5px; }
   .callout--up .callout__line { transform-origin: 50% 100%; }
   .callout__pill { display: block; padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); border: 1px solid var(--card-border); background: var(--color-bg); color: var(--color-ink-head); white-space: nowrap; font-size: 10px; letter-spacing: 0.12em; }
   .ann__list { display: none; }
   @media (min-width: 900px) {
-    .callout__line { height: 72px; }
+    .callout__line { height: 32px; }
     .callout__pill { padding: var(--space-2) var(--space-4); font-size: var(--text-mono); letter-spacing: var(--track-mono); }
   }
 </style>

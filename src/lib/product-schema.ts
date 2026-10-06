@@ -20,6 +20,8 @@ export function productSchema<I extends z.ZodTypeAny>(image: () => I) {
     heroAlt: z.string().min(1),
     // optional high-resolution photo for the home hero panel; falls back to hero
     cover: image().optional(),
+    // optional tight crop of the piece for the material labels; callout x/y are % of this image when set
+    closeup: image().optional(),
     gallery: z.array(z.object({ src: image(), alt: z.string().min(1) })).default([]),
     specs: z.array(z.object({ label: z.string().min(1), value: z.string().min(1) })).min(1),
     callouts: z

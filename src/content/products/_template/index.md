@@ -13,7 +13,8 @@ specs:
   - { label: Wood, value: "Teak" }
 # Optional:
 # gallery: [{ src: ./g-1.jpg, alt: "..." }]
-# callouts: [{ label: Teak, x: 50, y: 20, side: up }]   # x/y are % of hero.jpg
+# closeup: ./closeup.jpg                               # tight crop of the piece for the labels
+# callouts: [{ label: Teak, x: 50, y: 20, side: up }]   # x/y are % of closeup.jpg (or hero.jpg)
 # cover: ./cover.jpg                                   # high-res photo for the home hero panel
 # note: One short line for the card and page.
 # sketch: { src: ./sketch.png, caption: "Drawn before it's cut", labels: [{ label: Teak, x: 50, y: 20, side: up }] }

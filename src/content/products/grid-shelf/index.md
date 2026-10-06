@@ -21,10 +21,11 @@ specs:
   - { label: Holds, value: "16 cups" }
   - { label: Options, value: "Customisable on request" }
   - { label: Made, value: "One at a time, Dhaka" }
+closeup: ./closeup.jpg
 callouts:
-  - { label: "Teak (Shegun) frame", x: 72, y: 6, side: down }
-  - { label: Cross-lap pegs, x: 13, y: 46, side: up }
-  - { label: Sixteen slots, x: 42, y: 62, side: down }
+  - { label: "Cross-lap pegs", x: 14, y: 22, side: down }
+  - { label: "Teak (Shegun) frame", x: 95, y: 55, side: up }
+  - { label: "Sixteen slots", x: 70, y: 73, side: down }
 note: Customisable. Ask in your DM.
 model: grid-shelf
 ---

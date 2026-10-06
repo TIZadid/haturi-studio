@@ -17,7 +17,7 @@ const { src, caption, labels, code, alt } = Astro.props;
         <Image src={src} alt={alt} widths={[640, 1280, 1800]} sizes="(min-width: 900px) 80vw, 92vw" />
       </div>
       {labels.map((l, i) => (
-        <span class:list={['pin', `pin--${l.side}`]} style={`left:${l.x}%;top:${l.y}%`} data-sketch-pin>
+        <span class:list={['pin', `pin--${l.side}`, l.x < 25 ? 'pin--start' : l.x > 75 ? 'pin--end' : '']} style={`left:${l.x}%;top:${l.y}%`} data-sketch-pin>
           <span class="pin__dot mono">{pad2(i + 1)}</span>
           <span class="pin__line" data-sketch-line></span>
           <span class="pin__pill mono" data-sketch-label>{l.label}</span>
@@ -36,18 +36,21 @@ const { src, caption, labels, code, alt } = Astro.props;
     /* fit the whole drawing and its labels on screen while the section is pinned */
     max-width: min(1100px, calc((100svh - 260px) * 1.45)); }
   .sketch__draw :global(img) { width: 100%; }
-  .pin { position: absolute; transform: translate(-50%, -50%); }
-  .pin__dot { width: 22px; height: 22px; border-radius: var(--radius-pill); background: var(--color-ink-head); color: var(--color-cream); display: grid; place-items: center; font-size: 9px; letter-spacing: 0; }
-  .pin__line, .pin__pill { display: none; }
-  .sketch__list { list-style: none; display: grid; gap: var(--space-2); }
+  .pin { position: absolute; display: flex; flex-direction: column; align-items: center; transform: translate(-50%, -4.5px); }
+  .pin--up { flex-direction: column-reverse; transform: translate(-50%, calc(-100% + 4.5px)); }
+  .pin--start { align-items: flex-start; transform: translate(-4.5px, -4.5px); }
+  .pin--start.pin--up { transform: translate(-4.5px, calc(-100% + 4.5px)); }
+  .pin--end { align-items: flex-end; transform: translate(calc(-100% + 4.5px), -4.5px); }
+  .pin--end.pin--up { transform: translate(calc(-100% + 4.5px), calc(-100% + 4.5px)); }
+  .pin__dot { width: 9px; height: 9px; border-radius: var(--radius-pill); background: var(--color-ink-head); font-size: 0; }
+  .pin__line { display: block; width: 1px; height: 18px; background: var(--color-ink-head); transform-origin: 50% 0; }
+  .pin--start .pin__line { margin-left: 4px; } .pin--end .pin__line { margin-right: 4px; }
+  .pin--up .pin__line { transform-origin: 50% 100%; }
+  .pin__pill { display: block; padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); border: 1px solid var(--card-border); background: var(--color-cream); color: var(--color-ink-head); white-space: nowrap; font-size: 10px; letter-spacing: 0.12em; }
+  .sketch__list { display: none; }
   @media (min-width: 900px) {
-    .pin { display: flex; flex-direction: column; align-items: center; transform: translate(-50%, 0); }
-    .pin--up { flex-direction: column-reverse; transform: translate(-50%, -100%); }
-    .pin__dot { width: 9px; height: 9px; font-size: 0; }
-    .pin__line { display: block; width: 1px; height: 56px; background: var(--color-ink-head); transform-origin: 50% 0; }
-    .pin--up .pin__line { transform-origin: 50% 100%; }
-    .pin__pill { display: block; padding: var(--space-2) var(--space-4); border-radius: var(--radius-pill); border: 1px solid var(--card-border); background: var(--color-cream); color: var(--color-ink-head); white-space: nowrap; }
-    .sketch__list { display: none; }
+    .pin__line { height: 32px; }
+    .pin__pill { padding: var(--space-2) var(--space-4); font-size: var(--text-mono); letter-spacing: var(--track-mono); }
   }
 </style>
 <script>
